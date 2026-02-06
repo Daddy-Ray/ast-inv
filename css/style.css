@@ -559,12 +559,86 @@ footer::before {
     .about-stats { border-left: none; padding-left: 0; grid-template-columns: repeat(2, 1fr); }
     .footer-content { grid-template-columns: 1fr; }
     
-    /* Hide full brand text on smaller tablets to prevent overflow */
+    /* Optimized mobile navigation layout */
+    header {
+        padding: 1rem 5%;
+        justify-content: space-between; /* Ensure space between logo and menu */
+    }
+
+    .logo-container {
+        flex-shrink: 0; /* Prevent logo shrinking */
+        max-width: 80%; /* Allow space for hamburger */
+    }
+
+    .logo-container img {
+        height: 45px; /* Smaller logo for mobile */
+    }
+
+    /* Hide text on very small screens, or adjust if space permits */
     .brand-full {
-        display: none;
+        display: none; 
+    }
+
+    /* Hamburger Menu Logic (Simplified for now, assuming JS toggles a class) */
+    .mobile-menu-btn {
+        display: block !important; /* Force show */
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        cursor: pointer;
+        z-index: 1001;
+    }
+
+    nav {
+        display: none; /* Hidden by default */
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--white);
+        padding: 2rem;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        flex-direction: column;
+    }
+
+    nav.active {
+        display: flex;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: flex-start;
+        width: 100%;
     }
     
-    .logo-container img {
-        height: 55px;
+    nav a {
+        display: block;
+        width: 100%;
+        padding: 10px 0;
+    }
+    
+    /* Move lang switch to bottom of mobile menu or keep in flow */
+    .lang-switch {
+        margin-top: 1rem;
+        width: 100%;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .lang-dropdown {
+        position: static;
+        box-shadow: none;
+        border: none;
+        padding-left: 1rem;
+        display: none; /* Hidden until clicked */
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+    }
+    
+    /* Simple JS toggle for lang dropdown in mobile would be needed, 
+       or just show them all. For simplicity here: */
+    .lang-switch:hover .lang-dropdown {
+        display: block;
     }
 }
