@@ -287,6 +287,27 @@ nav a:hover::before {
     background-position: center;
 }
 
+/* Contact cards hover behavior (same interaction feel as service cards) */
+.contact-item {
+    transition: var(--transition);
+    border-top: 1px solid rgba(0,0,0,0.08);
+}
+
+.contact-item:hover {
+    transform: translateY(-10px);
+    border-top-color: var(--accent-color);
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+}
+
+.contact-item i {
+    transition: var(--transition);
+}
+
+.contact-item:hover i {
+    color: var(--accent-color);
+    transform: scale(1.08);
+}
+
 /* Abstract shapes for background (Keep as overlay or fallback) */
 .hero::before {
     content: '';
