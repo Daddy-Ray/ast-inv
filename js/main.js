@@ -1,10 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Keep footer year current across all pages.
-    const currentYear = new Date().getFullYear();
-    document.querySelectorAll('.footer-bottom p').forEach((el) => {
-        el.textContent = el.textContent.replace(/\b20\d{2}\b/, String(currentYear));
-    });
-
     // Navbar scroll effect
     const header = document.querySelector('header');
     const updateHeader = () => {
