@@ -3,16 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>阿斯特香港投資有限公司 - 核心业务</title>
-    <!-- Google Fonts -->
+    <meta name="description" content="AST investment capabilities across ports, resources and real estate.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="AST Investing of Hong Kong">
+    <meta property="og:locale" content="zh_HK">
+    <meta property="og:title" content="AST Investing of Hong Kong - Services">
+    <meta property="og:description" content="Track capabilities, client segments and execution process.">
+    <meta property="og:url" content="https://www.ast-inv.hk/zh/services.html">
+    <title>阿斯特香港投資有限公司 - 业务范围</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <link rel="stylesheet" href="../css/finance-network-map.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body class="page-services">
     <header>
         <div class="logo-container">
             <a href="index.html" class="logo-link">
@@ -24,14 +31,15 @@
             <ul>
                 <li><a href="index.html">首页</a></li>
                 <li><a href="about.html">关于我们</a></li>
-                <li><a href="services.html">服务</a></li>
+                <li><a href="services.html">业务范围</a></li>
+                <li><a href="projects.html">项目介绍</a></li>
                 <li><a href="contact.html">联系我们</a></li>
                 <li class="lang-switch">
                     <div class="lang-current"><i class="fas fa-globe"></i> 中文 <i class="fas fa-chevron-down"></i></div>
                     <div class="lang-dropdown">
                         <a href="../en/services.html">English</a>
                         <a href="services.html">中文</a>
-                        <a href="../ru/services.html">Русский</a>
+                        <a href="../ru/services.html">Russian</a>
                     </div>
                 </li>
             </ul>
@@ -43,26 +51,71 @@
 
     <div class="page-header-spacer" style="height: 100px;"></div>
 
+    <section class="services business-network-section">
+        <div class="section-header">
+            <h2>资本网络地图</h2>
+            <p>以阿拉木图为资本中心，向波斯湾、欧洲与亚太市场辐射连接，展示跨区域业务协同网络。</p>
+        </div>
+        <div class="finance-map-shell">
+            <div id="finance-network-map" class="finance-map"></div>
+            <div class="finance-map-info"></div>
+            <div class="finance-map-vignette"></div>
+        </div>
+    </section>
+
     <section id="services" class="services">
         <div class="section-header">
-            <h2>核心业务</h2>
-            <p>通过基础设施、资源和地产领域的战略资产推动增长。</p>
+            <h2>业务范围</h2>
+            <p>业务覆盖农业、建筑与矿业三大方向，围绕国际投资与资本增值目标，构建跨区域协同与稳健执行能力。</p>
         </div>
         <div class="service-grid">
+            <div class="service-group-title">农业类</div>
             <div class="service-card">
-                <i class="fas fa-ship service-icon"></i>
-                <h3>港口资产交易</h3>
-                <p>全球港口基础设施的战略收购与剥离。我们专注于商业港口和物流枢纽的高价值交易与运营优化。</p>
+                <i class="fas fa-tractor service-icon"></i>
+                <h3>农产品供应链投资与运营</h3>
+                <p>聚焦酒类与粮食等核心农产品，开展跨区域采购、贸易与供应链组织，提升资源配置效率与交付稳定性。</p>
             </div>
             <div class="service-card">
-                <i class="fas fa-gem service-icon"></i>
-                <h3>矿场经营</h3>
-                <p>关键资源的可持续开采与管理。我们运营具有规模潜力的矿业项目，聚焦工业矿物与贵金属领域。</p>
+                <i class="fas fa-wine-bottle service-icon"></i>
+                <h3>酒类产品运营与渠道协同</h3>
+                <p>依托产品标准与品质管理体系，推进供应、渠道与市场服务协同运行。</p>
             </div>
             <div class="service-card">
-                <i class="fas fa-city service-icon"></i>
-                <h3>房地产开发</h3>
-                <p>高端商业与住宅地产投资。我们深耕高增长市场，打造未来的城市地标与优质资产。</p>
+                <i class="fas fa-seedling service-icon"></i>
+                <h3>粮食供应链整合</h3>
+                <p>完善采购、仓储、运输与交付链路，通过系统化运营提升供应效率与规模效应。</p>
+            </div>
+            <div class="service-group-title">建筑类</div>
+            <div class="service-card">
+                <i class="fas fa-futbol service-icon"></i>
+                <h3>体育及公共场馆建设</h3>
+                <p>面向城市功能配套需求，提供从工程管理到项目交付的系统化建设服务。</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-home service-icon"></i>
+                <h3>住宅类项目开发与交付</h3>
+                <p>依托成熟的工程执行经验，统筹设计、建造与交付节奏，保障项目品质与进度。</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-road service-icon"></i>
+                <h3>道路及基础设施工程</h3>
+                <p>围绕不同区域市场建设需求，提供从施工组织到竣工验收的全流程服务。</p>
+            </div>
+            <div class="service-group-title">矿业类</div>
+            <div class="service-card">
+                <i class="fas fa-compass service-icon"></i>
+                <h3>铜矿勘探</h3>
+                <p>围绕重点矿区开展地质调查、资源识别与储量评估，形成从找矿到项目立项的前端能力。</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-helmet-safety service-icon"></i>
+                <h3>铜矿采矿</h3>
+                <p>通过规范化采矿组织与安全管理，保障矿石稳定产出，并与后续选矿、运输环节高效衔接。</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-industry service-icon"></i>
+                <h3>富集与冶炼</h3>
+                <p>依托富集与冶炼体系提升矿石附加值，稳定产出铜精矿、阴极铜及金银等多类副产品。</p>
             </div>
         </div>
     </section>
@@ -81,7 +134,8 @@
                 <ul>
                     <li><a href="index.html">首页</a></li>
                     <li><a href="about.html">关于我们</a></li>
-                    <li><a href="services.html">服务</a></li>
+                    <li><a href="services.html">业务范围</a></li>
+                    <li><a href="projects.html">项目介绍</a></li>
                 </ul>
             </div>
         </div>
@@ -90,6 +144,42 @@
         </div>
     </footer>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="../js/finance-network-map.js"></script>
+    <script>
+        const config = {
+            darkMode: false,
+            showLines: true,
+            lineColor: "#008C45",
+            nodeColor: "#1C3F60",
+            pulseEffect: true
+        };
+
+        const networkData = [
+            { city: "波斯湾", lat: 26.7, lng: 52.6, description: "能源与大宗商品贸易通道", value: 82, image: "../assets/backgrounds/services-financial-street.jpg" },
+            { city: "罗马尼亚", lat: 44.4268, lng: 26.1025, description: "东欧市场协同节点", value: 64, image: "../assets/backgrounds/projects-business.jpg" },
+            { city: "法国", lat: 48.8566, lng: 2.3522, description: "欧洲金融与产业合作枢纽", value: 71, image: "../assets/backgrounds/about-business.jpg" },
+            { city: "香港", lat: 22.3193, lng: 114.1694, description: "国际资本运作节点", value: 90, image: "../assets/backgrounds/about-victoria-harbor.jpg" },
+            { city: "中国大陆", lat: 31.2304, lng: 121.4737, description: "供应链与投资协同通道", value: 88, image: "../assets/backgrounds/china-consul-photo.png", caption: "创始人与中国驻阿拉木图领事合照" },
+            { city: "埃及", lat: 30.0444, lng: 31.2357, description: "北非市场拓展支点", value: 58, image: "../assets/backgrounds/egypt-consul-photo.png", caption: "创始人与埃及领事合照" },
+            { city: "沙特", lat: 24.7136, lng: 46.6753, description: "海湾地区战略合作节点", value: 76, image: "../assets/backgrounds/saudi-consul-photo.png", caption: "创始人与沙特领事合照" }
+        ];
+
+        const copy = {
+            overviewTitle: "资本网络总览",
+            overviewDesc: "以阿拉木图为总部中心，资本与业务网络向关键区域市场持续延展。",
+            hqTooltip: "总部 - 阿拉木图",
+            hqMiniLabel: "阿拉木图",
+            hqTitle: "总部 - 阿拉木图",
+            hqDesc: "核心资本运营中心与战略配置起点。",
+            hqImage: "../assets/backgrounds/home-business.jpg",
+            detailFallbackImage: "../assets/backgrounds/services-business.jpg",
+            valueLabel: "网络值",
+            resetLabel: "复位视图"
+        };
+
+        initFinanceNetworkMap("#finance-network-map", { config, data: networkData, copy });
+    </script>
     <script src="../js/main.js"></script>
 </body>
 </html>
