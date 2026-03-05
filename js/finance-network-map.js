@@ -296,6 +296,7 @@
         var activeInfo = null;
         var suppressClearOnce = false;
         var labelLayers = [];
+        var miniLabelActions = {};
 
         function suppressNextClear() {
             suppressClearOnce = true;
@@ -358,6 +359,27 @@
                 }
             });
         }
+
+        function registerMiniLabel(layer, key, onClick) {
+            if (!key || typeof onClick !== "function") return;
+            miniLabelActions[key] = onClick;
+            layer._miniLabelKey = key;
+            if (!layer || !layer.getTooltip) return;
+            var tooltip = layer.getTooltip();
+            if (!tooltip || !tooltip.getElement) return;
+            var tooltipEl = tooltip.getElement();
+            if (!tooltipEl) return;
+            tooltipEl.setAttribute("data-mini-key", key);
+        }
+
+        map.on("tooltipopen", function (e) {
+            if (!e || !e.tooltip || !e.tooltip.getElement) return;
+            var source = e.tooltip._source;
+            if (!source || !source._miniLabelKey) return;
+            var tooltipEl = e.tooltip.getElement();
+            if (!tooltipEl) return;
+            tooltipEl.setAttribute("data-mini-key", source._miniLabelKey);
+        });
 
         map.on("move zoom resize", renderInfoCard);
 
@@ -439,6 +461,9 @@
             });
             hqMarker.openTooltip();
             labelLayers.push(hqMarker);
+            registerMiniLabel(hqMarker, "hq", function () {
+                setInfo(copy.hqTitle, copy.hqDesc, L.latLng(ALMATY[0], ALMATY[1]), copy.hqImage || copy.detailFallbackImage, "");
+            });
         }, 250);
 
         hqMarker.on("click", function (e) {
@@ -467,6 +492,9 @@
             });
             marker.openTooltip();
             labelLayers.push(marker);
+            registerMiniLabel(marker, "city:" + node.city, function () {
+                setInfo(node.city, node.description, L.latLng(node.lat, node.lng), node.image || copy.detailFallbackImage, node.caption || "");
+            });
 
             marker.on("mouseover", function () {
                 flowLayer.setHover(node.city);
@@ -493,6 +521,20 @@
             config: config
         });
         flowLayer.addTo();
+
+        mapShell.addEventListener("click", function (evt) {
+            var target = evt.target;
+            if (!target || !target.closest) return;
+            var miniLabelEl = target.closest(".finance-mini-label");
+            if (!miniLabelEl || !mapShell.contains(miniLabelEl)) return;
+            var key = miniLabelEl.getAttribute("data-mini-key") || "";
+            var action = miniLabelActions[key];
+            if (typeof action !== "function") return;
+            suppressNextClear();
+            if (evt.preventDefault) evt.preventDefault();
+            if (evt.stopPropagation) evt.stopPropagation();
+            action();
+        });
 
         document.addEventListener("click", function (evt) {
             if (!container.parentElement.contains(evt.target)) {

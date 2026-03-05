@@ -83,7 +83,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 ],
                 'services.html': [
                     { id: 'services', label: '业务范围' },
-                    { id: 'business-network', label: '资本网络地图' }
+                    { id: 'business-network', label: '资本网络地图' },
+                    { page: 'service-full-chain.html', path: 'service-full-chain.html', label: '全链运营服务', flyout: true },
+                    { page: 'service-strategy-deals.html', path: 'service-strategy-deals.html', label: '战略与企业交易', flyout: true },
+                    { page: 'service-risk-compliance-forensics.html', path: 'service-risk-compliance-forensics.html', label: '风险、合规与法证', flyout: true },
+                    { page: 'service-tax-business-consulting.html', path: 'service-tax-business-consulting.html', label: '税务与商务咨询', flyout: true }
                 ],
                 'projects.html': [
                     { id: 'projects-overview', label: '项目总览' },
@@ -106,7 +110,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 ],
                 'services.html': [
                     { id: 'services', label: 'Business Scope' },
-                    { id: 'business-network', label: 'Capital Network Map' }
+                    { id: 'business-network', label: 'Capital Network Map' },
+                    { page: 'service-full-chain.html', path: 'service-full-chain.html', label: 'End-to-End Operations', flyout: true },
+                    { page: 'service-strategy-deals.html', path: 'service-strategy-deals.html', label: 'Strategy and Corporate Deals', flyout: true },
+                    { page: 'service-risk-compliance-forensics.html', path: 'service-risk-compliance-forensics.html', label: 'Risk, Compliance and Forensics', flyout: true },
+                    { page: 'service-tax-business-consulting.html', path: 'service-tax-business-consulting.html', label: 'Tax and Business Advisory', flyout: true }
                 ],
                 'projects.html': [
                     { id: 'projects-overview', label: 'Portfolio Overview' },
@@ -129,7 +137,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 ],
                 'services.html': [
                     { id: 'services', label: 'Сферы деятельности' },
-                    { id: 'business-network', label: 'Карта капитальной сети' }
+                    { id: 'business-network', label: 'Карта капитальной сети' },
+                    { page: 'service-full-chain.html', path: 'service-full-chain.html', label: 'Комплексное сопровождение', flyout: true },
+                    { page: 'service-strategy-deals.html', path: 'service-strategy-deals.html', label: 'Стратегия и сделки', flyout: true },
+                    { page: 'service-risk-compliance-forensics.html', path: 'service-risk-compliance-forensics.html', label: 'Риски, комплаенс и форензика', flyout: true },
+                    { page: 'service-tax-business-consulting.html', path: 'service-tax-business-consulting.html', label: 'Налоговый и бизнес-консалтинг', flyout: true }
                 ],
                 'projects.html': [
                     { id: 'projects-overview', label: 'Обзор проектов' },
@@ -178,14 +190,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const submenu = document.createElement('div');
             submenu.className = 'nav-submenu';
-            entries.forEach((entry) => {
+            const flyoutEntries = entries.filter((entry) => entry.flyout);
+            const mainEntries = entries.filter((entry) => !entry.flyout);
+
+            const renderEntry = (entry, targetContainer) => {
                 const item = document.createElement('a');
-                item.href = `${href.split('#')[0]}#${entry.id}`;
+                const targetPage = entry.page || pageKey;
+                const targetPath = entry.path || href.split('#')[0];
+                item.href = entry.id ? `${targetPath}#${entry.id}` : targetPath;
                 item.textContent = entry.label;
-                item.dataset.page = pageKey;
-                item.dataset.target = entry.id;
-                submenu.appendChild(item);
-            });
+                item.dataset.page = targetPage;
+                item.dataset.target = entry.id || '';
+                targetContainer.appendChild(item);
+                return item;
+            };
+
+            const mainItems = mainEntries.map((entry) => ({
+                entry,
+                element: renderEntry(entry, submenu)
+            }));
+
+            if (flyoutEntries.length) {
+                li.classList.add('nav-with-flyout');
+                const flyoutTriggerItem = mainItems.find((item) => item.entry.id === 'services') || mainItems[0];
+                const flyout = document.createElement('div');
+                flyout.className = 'nav-submenu-flyout';
+                flyoutEntries.forEach((entry) => renderEntry(entry, flyout));
+                if (flyoutTriggerItem && flyoutTriggerItem.element) {
+                    flyoutTriggerItem.element.classList.add('nav-flyout-trigger');
+                    flyoutTriggerItem.element.insertAdjacentElement('afterend', flyout);
+                } else {
+                    submenu.appendChild(flyout);
+                }
+            }
             li.appendChild(submenu);
         });
 
@@ -196,11 +233,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const targetId = subLink.dataset.target || '';
             const currentPage = getCurrentPageKey();
 
-            if (targetPage === currentPage) {
+            if (targetId && targetPage === currentPage) {
                 e.preventDefault();
                 history.replaceState(null, '', `#${targetId}`);
                 scrollToSection(targetId);
-            } else {
+            } else if (targetId && targetPage !== currentPage) {
                 sessionStorage.setItem('ast-nav-target', JSON.stringify({
                     page: targetPage,
                     id: targetId,
@@ -231,12 +268,34 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => scrollToSection(id), 50);
     };
 
+    const installClickableCards = () => {
+        const cards = document.querySelectorAll('.clickable-card[data-href]');
+        cards.forEach((card) => {
+            card.setAttribute('role', 'link');
+            card.setAttribute('tabindex', '0');
+            const href = card.getAttribute('data-href');
+            if (!href) return;
+
+            card.addEventListener('click', () => {
+                window.location.href = href;
+            });
+
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    window.location.href = href;
+                }
+            });
+        });
+    };
+
     ensurePageSectionIds();
     applyProjectsVisibility();
     applySiteFavicon();
     installNavSectionDropdowns();
     restorePendingSectionJump();
     restoreHashJump();
+    installClickableCards();
 
     // Ensure services section appears above network map.
     const servicesSection = document.querySelector('section#services.services');

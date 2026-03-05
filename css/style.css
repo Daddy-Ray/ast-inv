@@ -208,6 +208,7 @@ nav a:hover::before {
     pointer-events: none;
     transition: var(--transition);
     z-index: 1200;
+    overflow: visible;
 }
 
 .nav-with-submenu:hover .nav-submenu,
@@ -243,6 +244,36 @@ nav a:hover::before {
     color: var(--secondary-color);
     background: linear-gradient(135deg, rgba(0, 140, 69, 0.12), rgba(0, 140, 69, 0.06));
     box-shadow: inset 0 0 0 1px rgba(0, 140, 69, 0.2);
+}
+
+.nav-submenu-flyout {
+    position: absolute;
+    left: calc(100% + 6px);
+    top: -1px;
+    min-width: 230px;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.84));
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    border-radius: 14px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(14px) saturate(125%);
+    -webkit-backdrop-filter: blur(14px) saturate(125%);
+    padding: 0.55rem 0.45rem;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(-8px);
+    transition: var(--transition);
+}
+
+.nav-submenu .nav-flyout-trigger:hover + .nav-submenu-flyout,
+.nav-submenu .nav-flyout-trigger:focus + .nav-submenu-flyout,
+.nav-submenu .nav-flyout-trigger:focus-visible + .nav-submenu-flyout,
+.nav-submenu .nav-submenu-flyout:hover,
+.nav-submenu .nav-submenu-flyout:focus-within {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(0);
 }
 
 /* Language Switcher */
@@ -546,6 +577,10 @@ body.page-project-detail {
     align-items: start;
 }
 
+.service-grid-four {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .service-icon {
     font-size: 3.5rem;
     color: var(--secondary-color);
@@ -572,6 +607,15 @@ body.page-project-detail {
 .service-card:hover {
     border-top-color: var(--accent-color);
     transform: translateY(-10px);
+}
+
+.service-card.clickable-card {
+    cursor: pointer;
+}
+
+.service-card.clickable-card:focus-visible {
+    outline: 2px solid rgba(0, 140, 69, 0.8);
+    outline-offset: 3px;
 }
 
 .service-card h3 {
@@ -763,6 +807,16 @@ body.page-project-detail {
     .service-group-content.is-expanded {
         grid-template-columns: 1fr;
     }
+
+    .service-grid-four {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .service-grid-four {
+        grid-template-columns: 1fr;
+    }
 }
 
 .service-card p {
@@ -923,6 +977,22 @@ footer::before {
         font-size: 0.84rem;
         text-align: center;
         border-radius: 8px;
+    }
+
+    .nav-submenu-flyout {
+        position: static;
+        min-width: 100%;
+        margin-top: 0.35rem;
+        transform: none;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        padding: 0.1rem 0;
     }
     
     /* Move lang switch to bottom of mobile menu or keep in flow */
