@@ -41,6 +41,65 @@ document.addEventListener('DOMContentLoaded', () => {
         return file || 'index.html';
     };
 
+    const ensureServiceDetailLangSwitch = () => {
+        const page = getCurrentPageKey();
+        const serviceDetailPages = new Set([
+            'service-full-chain.html',
+            'service-strategy-deals.html',
+            'service-risk-compliance-forensics.html',
+            'service-tax-business-consulting.html'
+        ]);
+        if (!serviceDetailPages.has(page)) return;
+
+        const navList = document.querySelector('header nav > ul');
+        if (!navList || navList.querySelector('.lang-switch')) return;
+
+        const path = window.location.pathname.toLowerCase();
+        const isSrcGroup = path.includes('/en-src/') || path.includes('/zh-src/') || path.includes('/ru-src/');
+
+        const targetDirs = isSrcGroup
+            ? { en: 'en-src', zh: 'zh-src', ru: 'ru-src' }
+            : { en: 'en', zh: 'zh', ru: 'ru' };
+
+        const lang = (document.documentElement.lang || 'en').toLowerCase().startsWith('zh')
+            ? 'zh'
+            : (document.documentElement.lang || 'en').toLowerCase().startsWith('ru')
+                ? 'ru'
+                : 'en';
+
+        const currentLabels = {
+            en: 'EN',
+            zh: '中文',
+            ru: 'Русский'
+        };
+        const linkLabels = {
+            en: 'English',
+            zh: '中文',
+            ru: 'Russian'
+        };
+
+        const switchItem = document.createElement('li');
+        switchItem.className = 'lang-switch';
+
+        const current = document.createElement('div');
+        current.className = 'lang-current';
+        current.innerHTML = `<i class="fas fa-globe"></i> ${currentLabels[lang]} <i class="fas fa-chevron-down"></i>`;
+
+        const dropdown = document.createElement('div');
+        dropdown.className = 'lang-dropdown';
+
+        ['en', 'zh', 'ru'].forEach((code) => {
+            const a = document.createElement('a');
+            a.href = `../${targetDirs[code]}/${page}`;
+            a.textContent = linkLabels[code];
+            dropdown.appendChild(a);
+        });
+
+        switchItem.appendChild(current);
+        switchItem.appendChild(dropdown);
+        navList.appendChild(switchItem);
+    };
+
     const ensurePageSectionIds = () => {
         const page = getCurrentPageKey();
         const setIdIfMissing = (selector, id) => {
@@ -245,6 +304,77 @@ document.addEventListener('DOMContentLoaded', () => {
                 }));
             }
         });
+
+        // Add small close delay to avoid accidental submenu dismissal.
+        const navParents = document.querySelectorAll('header nav > ul > li.nav-with-submenu');
+        navParents.forEach((li) => {
+            let closeTimer = null;
+            let flyoutCloseTimer = null;
+            const trigger = li.querySelector('.nav-flyout-trigger');
+            const flyout = li.querySelector('.nav-submenu-flyout');
+
+            const clearCloseTimer = () => {
+                if (!closeTimer) return;
+                clearTimeout(closeTimer);
+                closeTimer = null;
+            };
+
+            const clearFlyoutCloseTimer = () => {
+                if (!flyoutCloseTimer) return;
+                clearTimeout(flyoutCloseTimer);
+                flyoutCloseTimer = null;
+            };
+
+            const openSubmenu = () => {
+                clearCloseTimer();
+                li.classList.add('nav-submenu-open');
+            };
+
+            const queueCloseSubmenu = () => {
+                clearCloseTimer();
+                closeTimer = setTimeout(() => {
+                    li.classList.remove('nav-submenu-open');
+                    li.classList.remove('nav-flyout-open');
+                }, 180);
+            };
+
+            li.addEventListener('mouseenter', openSubmenu);
+            li.addEventListener('mouseleave', queueCloseSubmenu);
+            li.addEventListener('focusin', openSubmenu);
+            li.addEventListener('focusout', (evt) => {
+                const related = evt.relatedTarget;
+                if (related && li.contains(related)) return;
+                queueCloseSubmenu();
+            });
+
+            if (trigger && flyout) {
+                const openFlyout = () => {
+                    clearFlyoutCloseTimer();
+                    openSubmenu();
+                    li.classList.add('nav-flyout-open');
+                };
+                const queueCloseFlyout = () => {
+                    clearFlyoutCloseTimer();
+                    flyoutCloseTimer = setTimeout(() => {
+                        li.classList.remove('nav-flyout-open');
+                    }, 220);
+                };
+
+                trigger.addEventListener('mouseenter', openFlyout);
+                trigger.addEventListener('focus', openFlyout);
+                trigger.addEventListener('mouseleave', queueCloseFlyout);
+                trigger.addEventListener('blur', queueCloseFlyout);
+
+                flyout.addEventListener('mouseenter', openFlyout);
+                flyout.addEventListener('mouseleave', queueCloseFlyout);
+                flyout.addEventListener('focusin', openFlyout);
+                flyout.addEventListener('focusout', (evt) => {
+                    const related = evt.relatedTarget;
+                    if (related && flyout.contains(related)) return;
+                    queueCloseFlyout();
+                });
+            }
+        });
     };
 
     const restorePendingSectionJump = () => {
@@ -289,13 +419,195 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    const installCaseGalleries = () => {
+        const uiLang = (document.documentElement.lang || 'en').toLowerCase().startsWith('zh')
+            ? 'zh'
+            : (document.documentElement.lang || 'en').toLowerCase().startsWith('ru')
+                ? 'ru'
+                : 'en';
+        const dotLabelPrefix = uiLang === 'zh'
+            ? '切换到第'
+            : uiLang === 'ru'
+                ? 'Перейти к изображению'
+                : 'Go to image';
+
+        const galleries = document.querySelectorAll('[data-case-gallery]');
+        galleries.forEach((gallery) => {
+            const track = gallery.querySelector('.case-gallery-track');
+            let slides = track ? Array.from(track.querySelectorAll('img')) : [];
+            const prevBtn = gallery.querySelector('.case-gallery-nav.prev');
+            const nextBtn = gallery.querySelector('.case-gallery-nav.next');
+            const dotsWrap = gallery.querySelector('[data-dots]');
+
+            // Keep gallery concise: display only first 3 images.
+            if (slides.length > 3) {
+                slides.slice(3).forEach((img) => img.remove());
+                slides = slides.slice(0, 3);
+            }
+
+            if (!track || slides.length <= 1) {
+                if (prevBtn) prevBtn.style.display = 'none';
+                if (nextBtn) nextBtn.style.display = 'none';
+                if (dotsWrap) dotsWrap.style.display = 'none';
+                return;
+            }
+
+            let active = 0;
+            let autoplayTimer = null;
+            let paused = false;
+            const dots = slides.map((_slide, index) => {
+                if (!dotsWrap) return null;
+                const dot = document.createElement('button');
+                dot.type = 'button';
+                dot.className = 'case-gallery-dot';
+                dot.setAttribute('aria-label', `${dotLabelPrefix} ${index + 1}`);
+                dot.addEventListener('click', () => {
+                    active = index;
+                    render();
+                });
+                dotsWrap.appendChild(dot);
+                return dot;
+            });
+
+            const render = () => {
+                track.style.transform = `translateX(-${active * 100}%)`;
+                dots.forEach((dot, index) => {
+                    if (!dot) return;
+                    dot.classList.toggle('is-active', index === active);
+                });
+            };
+
+            const step = (direction) => {
+                active = (active + direction + slides.length) % slides.length;
+                render();
+            };
+
+            const stopAutoplay = () => {
+                if (autoplayTimer) {
+                    clearInterval(autoplayTimer);
+                    autoplayTimer = null;
+                }
+            };
+
+            const startAutoplay = () => {
+                stopAutoplay();
+                if (paused || slides.length <= 1) return;
+                autoplayTimer = setInterval(() => {
+                    step(1);
+                }, 4200);
+            };
+
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => step(-1));
+            }
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => step(1));
+            }
+
+            const pause = () => {
+                paused = true;
+                stopAutoplay();
+            };
+            const resume = () => {
+                paused = false;
+                startAutoplay();
+            };
+
+            gallery.addEventListener('mouseenter', pause);
+            gallery.addEventListener('mouseleave', resume);
+            gallery.addEventListener('focusin', pause);
+            gallery.addEventListener('focusout', () => {
+                const focusedInside = gallery.contains(document.activeElement);
+                if (!focusedInside) {
+                    resume();
+                }
+            });
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    stopAutoplay();
+                } else if (!paused) {
+                    startAutoplay();
+                }
+            });
+
+            render();
+            startAutoplay();
+        });
+    };
+
+    const installCaseAccordions = () => {
+        const uiLang = (document.documentElement.lang || 'en').toLowerCase().startsWith('zh')
+            ? 'zh'
+            : (document.documentElement.lang || 'en').toLowerCase().startsWith('ru')
+                ? 'ru'
+                : 'en';
+
+        const labels = {
+            zh: { open: '展开案例详情', close: '收起案例详情' },
+            en: { open: 'Show Case Details', close: 'Hide Case Details' },
+            ru: { open: 'Показать детали кейса', close: 'Скрыть детали кейса' }
+        };
+        const copy = labels[uiLang] || labels.en;
+
+        const blocks = document.querySelectorAll('.service-case-block');
+        blocks.forEach((block) => {
+            if (block.querySelector('.service-case-toggle')) return;
+            const content = document.createElement('div');
+            content.className = 'service-case-content';
+
+            const keepVisibleSelector = '.service-case-name, .section-header, .case-gallery, .case-gallery-note, .service-case-summary';
+            const children = Array.from(block.children);
+            const collapsibleNodes = children.filter((child) => !child.matches(keepVisibleSelector));
+            if (!collapsibleNodes.length) return;
+
+            collapsibleNodes.forEach((node) => {
+                content.appendChild(node);
+            });
+
+            const toggle = document.createElement('button');
+            toggle.type = 'button';
+            toggle.className = 'service-case-toggle';
+            toggle.innerHTML = `<span class="label"></span><span class="caret">⌄</span>`;
+
+            const labelEl = toggle.querySelector('.label');
+            const setExpanded = (expanded) => {
+                block.classList.toggle('is-expanded', expanded);
+                block.classList.toggle('is-collapsed', !expanded);
+                toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+                if (labelEl) labelEl.textContent = expanded ? copy.close : copy.open;
+            };
+
+            toggle.addEventListener('click', () => {
+                const next = !block.classList.contains('is-expanded');
+                setExpanded(next);
+            });
+
+            const summaryNode = block.querySelector('.service-case-summary');
+            const gallery = block.querySelector('.case-gallery');
+            const titleNode = block.querySelector('.service-case-name') || block.querySelector('.section-header');
+            const anchor = summaryNode || gallery || titleNode;
+            if (anchor) {
+                anchor.insertAdjacentElement('afterend', toggle);
+                toggle.insertAdjacentElement('afterend', content);
+            } else {
+                block.appendChild(toggle);
+                block.appendChild(content);
+            }
+            setExpanded(false);
+        });
+    };
+
     ensurePageSectionIds();
+    ensureServiceDetailLangSwitch();
     applyProjectsVisibility();
     applySiteFavicon();
     installNavSectionDropdowns();
     restorePendingSectionJump();
     restoreHashJump();
     installClickableCards();
+    installCaseAccordions();
+    installCaseGalleries();
 
     // Ensure services section appears above network map.
     const servicesSection = document.querySelector('section#services.services');
