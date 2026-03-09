@@ -14,3 +14,11 @@
 - This avoids local code-page issues that can turn Chinese text into mojibake or `?`.
 - Browser rendering remains normal Chinese.
 
+## Encoding Guard (recommended before upload)
+
+- Run check:
+  - `powershell -ExecutionPolicy Bypass -File .\tools\encoding-guard.ps1`
+- If it reports problems, first sync Chinese source from current clean pages:
+  - `powershell -ExecutionPolicy Bypass -File .\tools\encoding-guard.ps1 -FixZhSrcFromZh`
+- Then run check again until it passes.
+
