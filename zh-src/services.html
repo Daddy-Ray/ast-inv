@@ -15,8 +15,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-    <link rel="stylesheet" href="../css/finance-network-map.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="page-services">
@@ -38,7 +36,7 @@
                     <div class="lang-dropdown">
                         <a href="../en/services.html">English</a>
                         <a href="services.html">中文</a>
-                        <a href="../ru/services.html">Russian</a>
+                        <a href="../ru/services.html">Русский</a>
                     </div>
                 </li>
             </ul>
@@ -49,26 +47,6 @@
     </header>
 
     <div class="page-header-spacer" style="height: 100px;"></div>
-
-    <section class="services business-network-section">
-        <div class="section-header">
-            <h2>资本网络地图</h2>
-            <p>以阿拉木图为资本中心，向波斯湾、欧洲与亚太市场辐射连接，展示跨区域业务协同网络。</p>
-        </div>
-        <div class="finance-network-layout">
-            <div class="finance-network-copy">
-                <h3>国际投资与资本增值网络</h3>
-                <p>以阿拉木图为核心资本运营节点，公司持续连接波斯湾、欧洲与亚太等重点市场，推进跨区域资产配置与协同布局。</p>
-                <p>该网络覆盖从机会识别、项目落地到投后增值管理的关键环节，体现公司在国际投资中的执行能力与资本放大路径。</p>
-                <p>本图仅用于业务展示，不构成投资建议。</p>
-            </div>
-            <div class="finance-map-shell">
-                <div id="finance-network-map" class="finance-map"></div>
-                <div class="finance-map-info"></div>
-                <div class="finance-map-vignette"></div>
-            </div>
-        </div>
-    </section>
 
     <section id="services" class="services">
         <div class="section-header">
@@ -122,42 +100,6 @@
         </div>
     </footer>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script src="../js/finance-network-map.js"></script>
-    <script>
-        const config = {
-            darkMode: false,
-            showLines: true,
-            lineColor: "#008C45",
-            nodeColor: "#1C3F60",
-            pulseEffect: true
-        };
-
-        const networkData = [
-            { city: "波斯湾", lat: 26.7, lng: 52.6, description: "能源与大宗商品贸易通道", value: 82, image: "../assets/backgrounds/services-financial-street.jpg" },
-            { city: "罗马尼亚", lat: 44.4268, lng: 26.1025, description: "东欧市场协同节点", value: 64, image: "../assets/backgrounds/projects-business.jpg" },
-            { city: "法国", lat: 48.8566, lng: 2.3522, description: "欧洲金融与产业合作枢纽", value: 71, image: "../assets/backgrounds/about-business.jpg" },
-            { city: "香港", lat: 22.3193, lng: 114.1694, description: "国际资本运作节点", value: 90, image: "../assets/backgrounds/about-victoria-harbor.jpg" },
-            { city: "中国大陆", lat: 31.2304, lng: 121.4737, description: "供应链与投资协同通道", value: 88, image: "../assets/backgrounds/china-consul-photo.png", caption: "创始人与中国驻阿拉木图领事合照" },
-            { city: "埃及", lat: 30.0444, lng: 31.2357, description: "北非市场拓展支点", value: 58, image: "../assets/backgrounds/egypt-consul-photo.png", caption: "创始人与埃及领事合照" },
-            { city: "沙特", lat: 24.7136, lng: 46.6753, description: "海湾地区战略合作节点", value: 76, image: "../assets/backgrounds/saudi-consul-photo.png", caption: "创始人与沙特领事合照" }
-        ];
-
-        const copy = {
-            overviewTitle: "资本网络总览",
-            overviewDesc: "以阿拉木图为总部中心，资本与业务网络向关键区域市场持续延展。",
-            hqTooltip: "总部 - 阿拉木图",
-            hqMiniLabel: "阿拉木图",
-            hqTitle: "总部 - 阿拉木图",
-            hqDesc: "核心资本运营中心与战略配置起点。",
-            hqImage: "../assets/backgrounds/home-business.jpg",
-            detailFallbackImage: "../assets/backgrounds/services-business.jpg",
-            valueLabel: "网络价值",
-            resetLabel: "复位视图"
-        };
-
-        initFinanceNetworkMap("#finance-network-map", { config, data: networkData, copy });
-    </script>
     <script src="../js/main.js"></script>
 </body>
 </html>

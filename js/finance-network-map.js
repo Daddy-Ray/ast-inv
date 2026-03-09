@@ -221,10 +221,12 @@
             var toPt = map.latLngToLayerPoint(state.to);
             var ctrlPt = computeControlPoint(fromPt, toPt);
             var highlight = self.hoverCity === state.id;
-            var alphaBase = highlight ? 0.78 : 0.33;
-            var lineWidth = (state.node.value / 40) + (highlight ? 1.1 : 0.25);
+            var alphaBase = highlight ? 0.92 : 0.33;
+            var lineWidth = (state.node.value / 40) + (highlight ? 1.8 : 0.25);
 
-            ctx.strokeStyle = hexToRgba(self.options.config.lineColor, alphaBase);
+            ctx.strokeStyle = highlight
+                ? hexToRgba("#CD212A", alphaBase)
+                : hexToRgba(self.options.config.lineColor, alphaBase);
             ctx.lineWidth = lineWidth;
             ctx.lineCap = "round";
             ctx.lineJoin = "round";
@@ -237,6 +239,18 @@
                 ctx.lineTo(p.x, p.y);
             }
             ctx.stroke();
+
+            if (highlight) {
+                ctx.strokeStyle = hexToRgba("#CD212A", 0.28);
+                ctx.lineWidth = lineWidth + 3.2;
+                ctx.beginPath();
+                ctx.moveTo(start.x, start.y);
+                for (var j = 1; j <= steps; j += 1) {
+                    var hp = pointOnQuadratic(fromPt, ctrlPt, toPt, j / steps);
+                    ctx.lineTo(hp.x, hp.y);
+                }
+                ctx.stroke();
+            }
         });
     };
 
@@ -382,12 +396,12 @@
         });
 
         map.on("move zoom resize", renderInfoCard);
+        var flowLayer = null;
 
-        function trySelectByLineClick(e) {
-            if (!e || !e.latlng) return false;
-            var clickPt = map.latLngToLayerPoint(e.latlng);
+        function findNearestLineNode(latlng, threshold) {
+            if (!latlng) return null;
+            var clickPt = map.latLngToLayerPoint(latlng);
             var hqPt = map.latLngToLayerPoint(L.latLng(ALMATY[0], ALMATY[1]));
-            var threshold = 10;
             var bestNode = null;
             var bestDist = Number.POSITIVE_INFINITY;
 
@@ -410,6 +424,13 @@
                 }
             }
 
+            if (!bestNode) return null;
+            return bestNode;
+        }
+
+        function trySelectByLineClick(e) {
+            if (!e || !e.latlng) return false;
+            var bestNode = findNearestLineNode(e.latlng, 10);
             if (!bestNode) return false;
             suppressNextClear();
             setInfo(bestNode.city, bestNode.description, L.latLng(bestNode.lat, bestNode.lng), bestNode.image || copy.detailFallbackImage, bestNode.caption || "");
@@ -419,6 +440,18 @@
         map.on("click", function (e) {
             if (trySelectByLineClick(e)) return;
             clearInfo();
+        });
+
+        map.on("mousemove", function (e) {
+            if (!e || !e.latlng) return;
+            var hoverNode = findNearestLineNode(e.latlng, 12);
+            if (flowLayer) flowLayer.setHover(hoverNode ? hoverNode.city : null);
+            map.getContainer().style.cursor = hoverNode ? "pointer" : "";
+        });
+
+        map.on("mouseout", function () {
+            if (flowLayer) flowLayer.setHover(null);
+            map.getContainer().style.cursor = "";
         });
 
         var mapShell = container.parentElement;
@@ -478,16 +511,22 @@
             var marker = L.circleMarker([node.lat, node.lng], {
                 radius: radius,
                 weight: 1.2,
-                color: "#b7c6d9",
-                fillColor: config.nodeColor,
+                color: "#f3b7bc",
+                fillColor: "#CD212A",
                 fillOpacity: 0.95,
                 opacity: 0.95
             }).addTo(map);
 
+            var cityName = String(node.city || "");
+            var placeLabelBelow =
+                /persian gulf/i.test(cityName) ||
+                cityName.indexOf("波斯湾") !== -1 ||
+                cityName.indexOf("Персидский залив") !== -1;
+
             marker.bindTooltip(node.city, {
                 permanent: true,
-                direction: "top",
-                offset: [0, -10],
+                direction: placeLabelBelow ? "bottom" : "top",
+                offset: placeLabelBelow ? [0, 10] : [0, -10],
                 className: "finance-mini-label"
             });
             marker.openTooltip();
@@ -497,13 +536,13 @@
             });
 
             marker.on("mouseover", function () {
-                flowLayer.setHover(node.city);
-                marker.setStyle({ radius: radius + 2, color: "#CD212A", fillColor: "#008C45" });
+                if (flowLayer) flowLayer.setHover(node.city);
+                marker.setStyle({ radius: radius + 2, color: "#ffe0e3", fillColor: "#E53945" });
             });
 
             marker.on("mouseout", function () {
-                flowLayer.setHover(null);
-                marker.setStyle({ radius: radius, color: "#b7c6d9", fillColor: config.nodeColor });
+                if (flowLayer) flowLayer.setHover(null);
+                marker.setStyle({ radius: radius, color: "#f3b7bc", fillColor: "#CD212A" });
             });
 
             marker.on("click", function (e) {
@@ -516,7 +555,7 @@
             return marker;
         });
 
-        var flowLayer = new FinanceFlowLayer(map, {
+        flowLayer = new FinanceFlowLayer(map, {
             data: data,
             config: config
         });

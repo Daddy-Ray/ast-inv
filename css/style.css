@@ -455,6 +455,31 @@ body.page-contact {
     position: relative;
 }
 
+.hero-layout {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(380px, 46%);
+    gap: 2rem;
+    align-items: center;
+    z-index: 1;
+    position: relative;
+}
+
+.hero-with-map .hero-content {
+    max-width: 100%;
+}
+
+.hero-map-panel {
+    width: 100%;
+    max-width: 680px;
+    margin-left: auto;
+    z-index: 1;
+}
+
+.hero-with-map .finance-map {
+    height: 340px;
+}
+
 .hero h1 {
     margin-bottom: 2rem;
     color: var(--primary-color);
@@ -473,22 +498,39 @@ body.page-contact {
     opacity: 0.8;
 }
 
+.hero-actions {
+    display: flex;
+    gap: 0.9rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+@media (max-width: 1024px) {
+    .hero-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-map-panel {
+        margin: 0;
+    }
+}
+
 .btn {
     display: inline-block;
     padding: 1rem 3.5rem;
-    background-color: var(--secondary-color); /* Green by default */
+    background-color: var(--accent-color); /* Logo red as primary */
     color: var(--white);
     font-size: 0.95rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 2px;
-    border: none;
+    border: 1px solid var(--accent-color);
     border-radius: 4px; /* Slight radius */
     position: relative;
     overflow: hidden;
     z-index: 1;
     transition: var(--transition);
-    box-shadow: 0 4px 15px rgba(0, 140, 69, 0.3); /* Green shadow */
+    box-shadow: 0 4px 15px rgba(205, 33, 42, 0.28);
 }
 
 .btn::before {
@@ -498,18 +540,35 @@ body.page-contact {
     left: 0;
     width: 0;
     height: 100%;
-    background-color: var(--brand-dark); /* Dark Navy on hover */
+    background-color: var(--white); /* Logo white hover effect */
     z-index: -1;
     transition: var(--transition);
 }
 
 .btn:hover {
-    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.4); /* Dark shadow on hover */
+    color: var(--brand-dark);
+    border-color: rgba(15, 23, 42, 0.28);
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.22);
     transform: translateY(-2px);
 }
 
 .btn:hover::before {
     width: 100%;
+}
+
+.btn.btn-secondary {
+    background-color: var(--secondary-color); /* Logo green as secondary */
+    color: var(--white);
+    border: 1px solid var(--secondary-color);
+    box-shadow: 0 4px 12px rgba(0, 140, 69, 0.26);
+}
+
+.btn.btn-secondary::before {
+    background-color: var(--white); /* Same white hover effect */
+}
+
+.btn.btn-secondary:hover {
+    color: var(--secondary-color);
 }
 
 /* About Section - Minimalist Split */

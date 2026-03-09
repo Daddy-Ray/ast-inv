@@ -159,9 +159,9 @@
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    border: 2px solid rgba(194, 240, 216, 0.95);
-    background: radial-gradient(circle at 30% 30%, #c2f0d8, #008c45 72%);
-    box-shadow: 0 0 0 8px rgba(0, 140, 69, 0.18), 0 0 20px rgba(0, 140, 69, 0.72);
+    border: 2px solid rgba(255, 225, 228, 0.95);
+    background: radial-gradient(circle at 30% 30%, #ffd4d8, #cd212a 72%);
+    box-shadow: 0 0 0 8px rgba(205, 33, 42, 0.2), 0 0 20px rgba(205, 33, 42, 0.72);
     position: relative;
 }
 
@@ -188,15 +188,16 @@
 }
 
 .finance-city-tooltip::before {
-    border-top-color: rgba(255, 255, 255, 0.95);
+    border-top-color: rgba(255, 255, 255, 0.95) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.95) !important;
 }
 
 .finance-mini-label {
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(28, 63, 96, 0.22);
-    color: #1f334a;
+    background: rgba(255, 248, 235, 0.95);
+    border: 1px solid rgba(171, 117, 35, 0.42);
+    color: #5a3a15;
     border-radius: 8px;
-    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.1);
+    box-shadow: 0 6px 14px rgba(120, 79, 21, 0.16);
     padding: 4px 8px;
     font-size: 0.76rem;
     font-weight: 600;
@@ -207,7 +208,21 @@
 }
 
 .finance-mini-label::before {
-    border-top-color: rgba(255, 255, 255, 0.9);
+    border-top-color: rgba(255, 248, 235, 0.98) !important;
+    border-bottom-color: rgba(255, 248, 235, 0.98) !important;
+    border-style: solid;
+}
+
+.leaflet-tooltip-top.finance-mini-label::before {
+    border-top-color: rgba(255, 248, 235, 0.98) !important;
+    border-width: 9px 7px 0 !important;
+    filter: drop-shadow(0 1px 1px rgba(90, 58, 21, 0.22));
+}
+
+.leaflet-tooltip-bottom.finance-mini-label::before {
+    border-bottom-color: rgba(255, 248, 235, 0.98) !important;
+    border-width: 0 7px 9px !important;
+    filter: drop-shadow(0 -1px 1px rgba(90, 58, 21, 0.22));
 }
 
 .leaflet-control-attribution {

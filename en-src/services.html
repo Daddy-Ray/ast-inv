@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -17,8 +17,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-    <link rel="stylesheet" href="../css/finance-network-map.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="page-services">
@@ -40,8 +38,8 @@
                     <div class="lang-current"><i class="fas fa-globe"></i> EN <i class="fas fa-chevron-down"></i></div>
                     <div class="lang-dropdown">
                         <a href="services.html">English</a>
-                        <a href="../zh/services.html">涓枃</a>
-                        <a href="../ru/services.html">袪褍褋褋泻懈泄</a>
+                        <a href="../zh/services.html">中文</a>
+                        <a href="../ru/services.html">Русский</a>
                     </div>
                 </li>
             </ul>
@@ -52,26 +50,6 @@
     </header>
 
     <div class="page-header-spacer" style="height: 100px;"></div>
-
-    <section class="services business-network-section">
-        <div class="section-header">
-            <h2>Capital Network Map</h2>
-            <p>Centered in Almaty, the network extends toward the Gulf, Europe, and Asia-Pacific markets to visualize cross-regional capital connectivity.</p>
-        </div>
-        <div class="finance-network-layout">
-            <div class="finance-network-copy">
-                <h3>International Investment and Capital Appreciation Network</h3>
-                <p>With Almaty as the core capital operations hub, the company continuously connects key markets across the Gulf, Europe, and Asia-Pacific to advance cross-regional asset allocation and coordinated expansion.</p>
-                <p>The network covers critical stages from opportunity identification and project execution to post-investment value enhancement, reflecting the company's execution capability and capital amplification path in international investment.</p>
-                <p>This map is for business display purposes only and does not constitute investment advice.</p>
-            </div>
-            <div class="finance-map-shell">
-                <div id="finance-network-map" class="finance-map"></div>
-                <div class="finance-map-info"></div>
-                <div class="finance-map-vignette"></div>
-            </div>
-        </div>
-    </section>
 
     <section id="services" class="services">
         <div class="section-header">
@@ -126,42 +104,6 @@
         </div>
     </footer>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script src="../js/finance-network-map.js"></script>
-    <script>
-        const config = {
-            darkMode: false,
-            showLines: true,
-            lineColor: "#008C45",
-            nodeColor: "#1C3F60",
-            pulseEffect: true
-        };
-
-        const networkData = [
-            { city: "Persian Gulf", lat: 26.7, lng: 52.6, description: "Energy and commodity trade corridor", value: 82, image: "../assets/backgrounds/services-financial-street.jpg" },
-            { city: "Romania", lat: 44.4268, lng: 26.1025, description: "Eastern Europe market collaboration node", value: 64, image: "../assets/backgrounds/projects-business.jpg" },
-            { city: "France", lat: 48.8566, lng: 2.3522, description: "EU finance and industrial partnership hub", value: 71, image: "../assets/backgrounds/about-business.jpg" },
-            { city: "Hong Kong", lat: 22.3193, lng: 114.1694, description: "International capital operations node", value: 90, image: "../assets/backgrounds/about-victoria-harbor.jpg" },
-            { city: "Mainland China", lat: 31.2304, lng: 121.4737, description: "Supply chain and investment coordination channel", value: 88, image: "../assets/backgrounds/china-consul-photo.png", caption: "Photo of founder with the Chinese consul in Almaty" },
-            { city: "Egypt", lat: 30.0444, lng: 31.2357, description: "North Africa market expansion point", value: 58, image: "../assets/backgrounds/egypt-consul-photo.png", caption: "Photo of founder with the Egyptian consul" },
-            { city: "Saudi Arabia", lat: 24.7136, lng: 46.6753, description: "Strategic collaboration node in the Gulf region", value: 76, image: "../assets/backgrounds/saudi-consul-photo.png", caption: "Photo of founder with the Saudi consul" }
-        ];
-
-        const copy = {
-            overviewTitle: "Capital Network Overview",
-            overviewDesc: "With Almaty as headquarters, capital and business links continue expanding across strategic regional markets.",
-            hqTooltip: "Headquarters - Almaty",
-            hqMiniLabel: "Almaty",
-            hqTitle: "Headquarters - Almaty",
-            hqDesc: "Core capital operation center and strategic allocation origin.",
-            hqImage: "../assets/backgrounds/home-business.jpg",
-            detailFallbackImage: "../assets/backgrounds/services-business.jpg",
-            valueLabel: "Network Value",
-            resetLabel: "Reset View"
-        };
-
-        initFinanceNetworkMap("#finance-network-map", { config, data: networkData, copy });
-    </script>
     <script src="../js/main.js"></script>
 </body>
 </html>

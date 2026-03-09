@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -17,6 +17,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <link rel="stylesheet" href="../css/finance-network-map.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="page-home">
@@ -49,11 +51,23 @@
         </div>
     </header>
 
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1>Долгосрочный подход, <span>ценность реальных активов</span></h1>
-            <p>AST Investing of Hong Kong фокусируется на инфраструктуре, ресурсах и недвижимости. Исследовательский подход и строгая риск-дисциплина помогают нам поддерживать институциональных и состоятельных клиентов в кросс-циклическом размещении капитала.</p>
-            <a href="contact.html" class="btn">Назначить инвестиционный звонок</a>
+    <section id="home" class="hero hero-with-map">
+        <div class="hero-layout">
+            <div class="hero-content">
+                <h1>Долгосрочный подход, <span>ценность реальных активов</span></h1>
+                <p>AST Investing of Hong Kong фокусируется на международных инвестициях и увеличении капитала, опираясь на сеть с центральным узлом в Алматы и связями с рынками Персидского залива, Европы и АТР. Мы обеспечиваем полный цикл поддержки: от прединвестиционного анализа и исполнения сделок до постинвестиционной оптимизации, включая сквозные операции, стратегические сделки, риск-комплаенс и налоговый консалтинг.</p>
+                <div class="hero-actions">
+                    <a href="services.html" class="btn">Наши услуги</a>
+                    <a href="contact.html" class="btn btn-secondary">Назначить инвестиционный звонок</a>
+                </div>
+            </div>
+            <div class="hero-map-panel">
+                <div class="finance-map-shell">
+                    <div id="finance-network-map-home" class="finance-map"></div>
+                    <div class="finance-map-info"></div>
+                    <div class="finance-map-vignette"></div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -105,6 +119,42 @@
         </div>
     </footer>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="../js/finance-network-map.js"></script>
+    <script>
+        const homeMapConfig = {
+            darkMode: false,
+            showLines: true,
+            lineColor: "#008C45",
+            nodeColor: "#1C3F60",
+            pulseEffect: true
+        };
+
+        const homeNetworkData = [
+            { city: "Персидский залив", lat: 26.7, lng: 52.6, description: "Коридор торговли энергоресурсами и сырьевыми товарами", value: 82, image: "../assets/backgrounds/services-financial-street.jpg" },
+            { city: "Румыния", lat: 44.4268, lng: 26.1025, description: "Узел рыночной координации в Восточной Европе", value: 64, image: "../assets/backgrounds/projects-business.jpg" },
+            { city: "Франция", lat: 48.8566, lng: 2.3522, description: "Европейские финансово-промышленные партнерства", value: 71, image: "../assets/backgrounds/about-business.jpg" },
+            { city: "Гонконг", lat: 22.3193, lng: 114.1694, description: "Узел международных операций с капиталом", value: 90, image: "../assets/backgrounds/about-victoria-harbor.jpg" },
+            { city: "Материковый Китай", lat: 31.2304, lng: 121.4737, description: "Канал координации цепочки поставок и инвестиций", value: 88, image: "../assets/backgrounds/china-consul-photo.png", caption: "Основатель с консулом Китая в Алматы" },
+            { city: "Египет", lat: 30.0444, lng: 31.2357, description: "Точка расширения на рынки Северной Африки", value: 58, image: "../assets/backgrounds/egypt-consul-photo.png", caption: "Основатель с консулом Египта" },
+            { city: "Саудовская Аравия", lat: 24.7136, lng: 46.6753, description: "Стратегическое сотрудничество в регионе Персидского залива", value: 76, image: "../assets/backgrounds/saudi-consul-photo.png", caption: "Основатель с консулом Саудовской Аравии" }
+        ];
+
+        const homeMapCopy = {
+            overviewTitle: "Обзор капитальной сети",
+            overviewDesc: "Сеть с центром в Алматы расширяется на ключевые региональные рынки через капитал и бизнес-сотрудничество.",
+            hqTooltip: "Штаб-квартира - Алматы",
+            hqMiniLabel: "Алматы",
+            hqTitle: "Штаб-квартира - Алматы",
+            hqDesc: "Основной центр операций с капиталом и точка стратегической аллокации.",
+            hqImage: "../assets/backgrounds/home-business.jpg",
+            detailFallbackImage: "../assets/backgrounds/services-business.jpg",
+            valueLabel: "Сетевой вес",
+            resetLabel: "Сбросить вид"
+        };
+
+        initFinanceNetworkMap("#finance-network-map-home", { config: homeMapConfig, data: homeNetworkData, copy: homeMapCopy });
+    </script>
     <script src="../js/main.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -15,6 +15,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <link rel="stylesheet" href="./css/finance-network-map.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="page-home">
@@ -36,8 +38,8 @@
                     <div class="lang-current"><i class="fas fa-globe"></i> EN <i class="fas fa-chevron-down"></i></div>
                     <div class="lang-dropdown">
                         <a href="index.html">English</a>
-                        <a href="zh/index.html">涓枃</a>
-                        <a href="ru/index.html">袪褍褋褋泻懈泄</a>
+                        <a href="zh/index.html">中文</a>
+                        <a href="ru/index.html">Русский</a>
                     </div>
                 </li>
             </ul>
@@ -47,11 +49,23 @@
         </div>
     </header>
 
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1>Long-Term Thinking, <span>Real Asset Value</span></h1>
-            <p>AST Investing of Hong Kong focuses on infrastructure, resources and real estate. Through research-driven decisions and disciplined risk management, we support institutions and high-net-worth clients with cross-cycle allocation solutions.</p>
-            <a href="en/contact.html" class="btn">Schedule an Investment Call</a>
+    <section id="home" class="hero hero-with-map">
+        <div class="hero-layout">
+            <div class="hero-content">
+                <h1>Long-Term Thinking, <span>Real Asset Value</span></h1>
+                <p>AST Investing of Hong Kong focuses on international investment and capital appreciation around an Almaty-centered operating network connected to Gulf, European, and Asia-Pacific markets. We provide full-cycle support from pre-investment assessment and transaction execution to post-investment optimization, with capabilities in end-to-end operations, strategic deals, risk-compliance, and tax advisory.</p>
+                <div class="hero-actions">
+                    <a href="en/services.html" class="btn">Our Services</a>
+                    <a href="en/contact.html" class="btn btn-secondary">Schedule an Investment Call</a>
+                </div>
+            </div>
+            <div class="hero-map-panel">
+                <div class="finance-map-shell">
+                    <div id="finance-network-map-home" class="finance-map"></div>
+                    <div class="finance-map-info"></div>
+                    <div class="finance-map-vignette"></div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -103,6 +117,42 @@
         </div>
     </footer>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="./js/finance-network-map.js"></script>
+    <script>
+        const homeMapConfig = {
+            darkMode: false,
+            showLines: true,
+            lineColor: "#008C45",
+            nodeColor: "#1C3F60",
+            pulseEffect: true
+        };
+
+        const homeNetworkData = [
+            { city: "Persian Gulf", lat: 26.7, lng: 52.6, description: "Energy and commodity trade corridor", value: 82, image: "./assets/backgrounds/services-financial-street.jpg" },
+            { city: "Romania", lat: 44.4268, lng: 26.1025, description: "Eastern Europe market collaboration", value: 64, image: "./assets/backgrounds/projects-business.jpg" },
+            { city: "France", lat: 48.8566, lng: 2.3522, description: "EU finance and industrial partnerships", value: 71, image: "./assets/backgrounds/about-business.jpg" },
+            { city: "Hong Kong", lat: 22.3193, lng: 114.1694, description: "International capital operations node", value: 90, image: "./assets/backgrounds/about-victoria-harbor.jpg" },
+            { city: "Mainland China", lat: 31.2304, lng: 121.4737, description: "Supply chain and investment channel", value: 88, image: "./assets/backgrounds/china-consul-photo.png", caption: "Founder with Consul of China in Almaty" },
+            { city: "Egypt", lat: 30.0444, lng: 31.2357, description: "North Africa market expansion point", value: 58, image: "./assets/backgrounds/egypt-consul-photo.png", caption: "Founder with Consul of Egypt" },
+            { city: "Saudi Arabia", lat: 24.7136, lng: 46.6753, description: "Strategic cooperation in Gulf region", value: 76, image: "./assets/backgrounds/saudi-consul-photo.png", caption: "Founder with Consul of Saudi Arabia" }
+        ];
+
+        const homeMapCopy = {
+            overviewTitle: "Capital Network Overview",
+            overviewDesc: "Headquartered in Almaty, the network extends to strategic regional markets through capital and business collaboration.",
+            hqTooltip: "Headquarters - Almaty",
+            hqMiniLabel: "Almaty",
+            hqTitle: "Headquarters - Almaty",
+            hqDesc: "Primary capital operation center and strategic allocation origin.",
+            hqImage: "./assets/backgrounds/home-business.jpg",
+            detailFallbackImage: "./assets/backgrounds/services-business.jpg",
+            valueLabel: "Network value",
+            resetLabel: "Reset View"
+        };
+
+        initFinanceNetworkMap("#finance-network-map-home", { config: homeMapConfig, data: homeNetworkData, copy: homeMapCopy });
+    </script>
     <script src="./js/main.js"></script>
 </body>
 </html>

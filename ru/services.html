@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -17,8 +17,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-    <link rel="stylesheet" href="../css/finance-network-map.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="page-services">
@@ -52,26 +50,6 @@
     </header>
 
     <div class="page-header-spacer" style="height: 100px;"></div>
-
-    <section class="services business-network-section">
-        <div class="section-header">
-            <h2>Карта капитальной сети</h2>
-            <p>С центром в Алматы сеть распространяется в сторону Персидского залива, Европы и АТР, отражая кросс-региональные связи капитала.</p>
-        </div>
-        <div class="finance-network-layout">
-            <div class="finance-network-copy">
-                <h3>Сеть международных инвестиций и роста капитала</h3>
-                <p>С центром капитальных операций в Алматы компания последовательно соединяет ключевые рынки Персидского залива, Европы и АТР, продвигая кросс-региональное распределение активов и согласованное развитие.</p>
-                <p>Сеть охватывает критические этапы от выявления возможностей и реализации проектов до постинвестиционного увеличения стоимости, отражая исполнительную компетенцию компании и траекторию масштабирования капитала в международных инвестициях.</p>
-                <p>Данная карта предназначена только для представления бизнеса и не является инвестиционной рекомендацией.</p>
-            </div>
-            <div class="finance-map-shell">
-                <div id="finance-network-map" class="finance-map"></div>
-                <div class="finance-map-info"></div>
-                <div class="finance-map-vignette"></div>
-            </div>
-        </div>
-    </section>
 
     <section id="services" class="services">
         <div class="section-header">
@@ -126,42 +104,6 @@
         </div>
     </footer>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script src="../js/finance-network-map.js"></script>
-    <script>
-        const config = {
-            darkMode: false,
-            showLines: true,
-            lineColor: "#008C45",
-            nodeColor: "#1C3F60",
-            pulseEffect: true
-        };
-
-        const networkData = [
-            { city: "Персидский залив", lat: 26.7, lng: 52.6, description: "Энергетический и товарный торговый коридор", value: 82, image: "../assets/backgrounds/services-financial-street.jpg" },
-            { city: "Румыния", lat: 44.4268, lng: 26.1025, description: "Узел кооперации на рынке Восточной Европы", value: 64, image: "../assets/backgrounds/projects-business.jpg" },
-            { city: "Франция", lat: 48.8566, lng: 2.3522, description: "Европейский хаб финансового и индустриального партнерства", value: 71, image: "../assets/backgrounds/about-business.jpg" },
-            { city: "Гонконг", lat: 22.3193, lng: 114.1694, description: "Узел международных операций с капиталом", value: 90, image: "../assets/backgrounds/about-victoria-harbor.jpg" },
-            { city: "Материковый Китай", lat: 31.2304, lng: 121.4737, description: "Канал координации цепочек поставок и инвестиций", value: 88, image: "../assets/backgrounds/china-consul-photo.png", caption: "Фото основателя с консулом Китая в Алматы" },
-            { city: "Египет", lat: 30.0444, lng: 31.2357, description: "Точка расширения на рынке Северной Африки", value: 58, image: "../assets/backgrounds/egypt-consul-photo.png", caption: "Фото основателя с консулом Египта" },
-            { city: "Саудовская Аравия", lat: 24.7136, lng: 46.6753, description: "Стратегический узел сотрудничества в регионе Залива", value: 76, image: "../assets/backgrounds/saudi-consul-photo.png", caption: "Фото основателя с консулом Саудовской Аравии" }
-        ];
-
-        const copy = {
-            overviewTitle: "Обзор капитальной сети",
-            overviewDesc: "С Алматы как штаб-квартирой капитальные и деловые связи последовательно расширяются на ключевые региональные рынки.",
-            hqTooltip: "Штаб-квартира - Алматы",
-            hqMiniLabel: "Алматы",
-            hqTitle: "Штаб-квартира - Алматы",
-            hqDesc: "Ключевой центр управления капиталом и отправная точка стратегической аллокации.",
-            hqImage: "../assets/backgrounds/home-business.jpg",
-            detailFallbackImage: "../assets/backgrounds/services-business.jpg",
-            valueLabel: "Индекс сети",
-            resetLabel: "Сброс вида"
-        };
-
-        initFinanceNetworkMap("#finance-network-map", { config, data: networkData, copy });
-    </script>
     <script src="../js/main.js"></script>
 </body>
 </html>

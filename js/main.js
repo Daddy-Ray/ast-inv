@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const linkLabels = {
             en: 'English',
             zh: '中文',
-            ru: 'Russian'
+            ru: 'Русский'
         };
 
         const switchItem = document.createElement('li');
@@ -89,15 +89,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        if (page === 'services.html') {
-            setIdIfMissing('section.business-network-section', 'business-network');
-        } else if (page === 'contact.html') {
+        if (page === 'contact.html') {
             setIdIfMissing('section.contact-page', 'contact-overview');
         } else if (page === 'index.html') {
             // Home already has #home; ensure the highlights section is addressable.
             const servicesSections = document.querySelectorAll('section.services');
             if (servicesSections.length) {
-                const homeHighlights = Array.from(servicesSections).find((s) => !s.classList.contains('business-network-section'));
+                const homeHighlights = servicesSections[0];
                 if (homeHighlights && !homeHighlights.id) {
                     homeHighlights.id = 'home-highlights';
                 }
@@ -116,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 ],
                 'services.html': [
                     { id: 'services', label: '业务范围' },
-                    { id: 'business-network', label: '资本网络地图' },
                     { page: 'service-full-chain.html', path: 'service-full-chain.html', label: '全链运营服务', flyout: true },
                     { page: 'service-strategy-deals.html', path: 'service-strategy-deals.html', label: '战略与企业交易', flyout: true },
                     { page: 'service-risk-compliance-forensics.html', path: 'service-risk-compliance-forensics.html', label: '风险、合规与法证', flyout: true },
@@ -135,7 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 ],
                 'services.html': [
                     { id: 'services', label: 'Business Scope' },
-                    { id: 'business-network', label: 'Capital Network Map' },
                     { page: 'service-full-chain.html', path: 'service-full-chain.html', label: 'End-to-End Operations', flyout: true },
                     { page: 'service-strategy-deals.html', path: 'service-strategy-deals.html', label: 'Strategy and Corporate Deals', flyout: true },
                     { page: 'service-risk-compliance-forensics.html', path: 'service-risk-compliance-forensics.html', label: 'Risk, Compliance and Forensics', flyout: true },
@@ -154,7 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 ],
                 'services.html': [
                     { id: 'services', label: 'Сферы деятельности' },
-                    { id: 'business-network', label: 'Карта капитальной сети' },
                     { page: 'service-full-chain.html', path: 'service-full-chain.html', label: 'Комплексное сопровождение', flyout: true },
                     { page: 'service-strategy-deals.html', path: 'service-strategy-deals.html', label: 'Стратегия и сделки', flyout: true },
                     { page: 'service-risk-compliance-forensics.html', path: 'service-risk-compliance-forensics.html', label: 'Риски, комплаенс и форензика', flyout: true },
@@ -562,13 +557,6 @@ document.addEventListener('DOMContentLoaded', () => {
     installClickableCards();
     installCaseAccordions();
     installCaseGalleries();
-
-    // Ensure services section appears above network map.
-    const servicesSection = document.querySelector('section#services.services');
-    const networkSection = document.querySelector('section.business-network-section');
-    if (servicesSection && networkSection && networkSection.previousElementSibling !== servicesSection) {
-        networkSection.parentNode.insertBefore(servicesSection, networkSection);
-    }
 
     // Keep footer year current across all pages.
     const currentYear = new Date().getFullYear();

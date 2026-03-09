@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
@@ -17,6 +17,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <link rel="stylesheet" href="../css/finance-network-map.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="page-home">
@@ -49,11 +51,23 @@
         </div>
     </header>
 
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1>&#x957F;&#x671F;&#x4E3B;&#x4E49;&#xFF0C;<span>&#x805A;&#x7126;&#x771F;&#x5B9E;&#x4EF7;&#x503C;</span></h1>
-            <p>&#x963F;&#x65AF;&#x7279;&#x9999;&#x6E2F;&#x6295;&#x8CC7;&#x6709;&#x9650;&#x516C;&#x53F8;&#x4E13;&#x6CE8;&#x57FA;&#x7840;&#x8BBE;&#x65BD;&#x3001;&#x8D44;&#x6E90;&#x4E0E;&#x5730;&#x4EA7;&#x7B49;&#x5B9E;&#x4F53;&#x8D44;&#x4EA7;&#xFF0C;&#x4EE5;&#x7814;&#x7A76;&#x9A71;&#x52A8;&#x548C;&#x98CE;&#x9669;&#x7EAA;&#x5F8B;&#x4E3A;&#x6838;&#x5FC3;&#xFF0C;&#x4E3A;&#x673A;&#x6784;&#x4E0E;&#x9AD8;&#x51C0;&#x503C;&#x5BA2;&#x6237;&#x63D0;&#x4F9B;&#x8DE8;&#x5468;&#x671F;&#x914D;&#x7F6E;&#x65B9;&#x6848;&#x3002;</p>
-            <a href="contact.html" class="btn">&#x9884;&#x7EA6;&#x6295;&#x8D44;&#x6C9F;&#x901A;</a>
+    <section id="home" class="hero hero-with-map">
+        <div class="hero-layout">
+            <div class="hero-content">
+                <h1>&#x957F;&#x671F;&#x4E3B;&#x4E49;&#xFF0C;<span>&#x805A;&#x7126;&#x771F;&#x5B9E;&#x4EF7;&#x503C;</span></h1>
+                <p>阿斯特香港投资有限公司专注国际投资与资本增值，围绕阿拉木图核心节点，联动波斯湾、欧洲与亚太市场。我们提供覆盖投前研判、交易执行到投后优化的全周期服务，聚焦全链运营、战略交易、风险合规与税务咨询，帮助客户在复杂环境中提升决策质量、控制执行风险并实现长期增长。</p>
+                <div class="hero-actions">
+                    <a href="services.html" class="btn">我们的服务</a>
+                    <a href="contact.html" class="btn btn-secondary">&#x9884;&#x7EA6;&#x6295;&#x8D44;&#x6C9F;&#x901A;</a>
+                </div>
+            </div>
+            <div class="hero-map-panel">
+                <div class="finance-map-shell">
+                    <div id="finance-network-map-home" class="finance-map"></div>
+                    <div class="finance-map-info"></div>
+                    <div class="finance-map-vignette"></div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -105,6 +119,42 @@
         </div>
     </footer>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="../js/finance-network-map.js"></script>
+    <script>
+        const homeMapConfig = {
+            darkMode: false,
+            showLines: true,
+            lineColor: "#008C45",
+            nodeColor: "#1C3F60",
+            pulseEffect: true
+        };
+
+        const homeNetworkData = [
+            { city: "波斯湾", lat: 26.7, lng: 52.6, description: "能源与大宗商品贸易通道", value: 82, image: "../assets/backgrounds/services-financial-street.jpg" },
+            { city: "罗马尼亚", lat: 44.4268, lng: 26.1025, description: "东欧市场协同节点", value: 64, image: "../assets/backgrounds/projects-business.jpg" },
+            { city: "法国", lat: 48.8566, lng: 2.3522, description: "欧洲金融与产业合作枢纽", value: 71, image: "../assets/backgrounds/about-business.jpg" },
+            { city: "香港", lat: 22.3193, lng: 114.1694, description: "国际资本运作节点", value: 90, image: "../assets/backgrounds/about-victoria-harbor.jpg" },
+            { city: "中国大陆", lat: 31.2304, lng: 121.4737, description: "供应链与投资协同通道", value: 88, image: "../assets/backgrounds/china-consul-photo.png", caption: "创始人与中国驻阿拉木图领事合照" },
+            { city: "埃及", lat: 30.0444, lng: 31.2357, description: "北非市场拓展支点", value: 58, image: "../assets/backgrounds/egypt-consul-photo.png", caption: "创始人与埃及领事合照" },
+            { city: "沙特", lat: 24.7136, lng: 46.6753, description: "海湾地区战略合作节点", value: 76, image: "../assets/backgrounds/saudi-consul-photo.png", caption: "创始人与沙特领事合照" }
+        ];
+
+        const homeMapCopy = {
+            overviewTitle: "资本网络总览",
+            overviewDesc: "以阿拉木图为总部中心，资本与业务网络向关键区域市场持续延展。",
+            hqTooltip: "总部 - 阿拉木图",
+            hqMiniLabel: "阿拉木图",
+            hqTitle: "总部 - 阿拉木图",
+            hqDesc: "核心资本运营中心与战略配置起点。",
+            hqImage: "../assets/backgrounds/home-business.jpg",
+            detailFallbackImage: "../assets/backgrounds/services-business.jpg",
+            valueLabel: "网络价值",
+            resetLabel: "复位视图"
+        };
+
+        initFinanceNetworkMap("#finance-network-map-home", { config: homeMapConfig, data: homeNetworkData, copy: homeMapCopy });
+    </script>
     <script src="../js/main.js"></script>
 </body>
 </html>
