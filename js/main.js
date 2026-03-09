@@ -1,24 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Feature toggle: hide project pages until reopened.
-    const PROJECTS_VISIBLE = false;
-
-    const applyProjectsVisibility = () => {
-        if (PROJECTS_VISIBLE) return;
-
-        const currentPage = getCurrentPageKey();
-        const isProjectPage = currentPage === 'projects.html' || currentPage === 'project-almaty-stadium.html';
-        if (isProjectPage) {
-            window.location.replace('index.html');
-            return;
-        }
-
-        const projectLinks = document.querySelectorAll('a[href$="projects.html"], a[href$="project-almaty-stadium.html"]');
-        projectLinks.forEach((link) => {
-            var container = link.closest('li') || link;
-            container.style.display = 'none';
-        });
-    };
-
     const applySiteFavicon = () => {
         const mainScript = document.querySelector('script[src*="js/main.js"]');
         const faviconUrl = mainScript
@@ -111,14 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (page === 'services.html') {
             setIdIfMissing('section.business-network-section', 'business-network');
-        } else if (page === 'projects.html') {
-            setIdIfMissing('section.services', 'projects-overview');
-            setIdIfMissing('section.about', 'projects-updates');
         } else if (page === 'contact.html') {
             setIdIfMissing('section.contact-page', 'contact-overview');
-        } else if (page === 'project-almaty-stadium.html') {
-            setIdIfMissing('section.services', 'project-overview');
-            setIdIfMissing('section.about', 'project-updates');
         } else if (page === 'index.html') {
             // Home already has #home; ensure the highlights section is addressable.
             const servicesSections = document.querySelectorAll('section.services');
@@ -148,14 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     { page: 'service-risk-compliance-forensics.html', path: 'service-risk-compliance-forensics.html', label: '风险、合规与法证', flyout: true },
                     { page: 'service-tax-business-consulting.html', path: 'service-tax-business-consulting.html', label: '税务与商务咨询', flyout: true }
                 ],
-                'projects.html': [
-                    { id: 'projects-overview', label: '项目总览' },
-                    { id: 'projects-updates', label: '更新机制' }
-                ],
-                'project-almaty-stadium.html': [
-                    { id: 'project-overview', label: '项目详情' },
-                    { id: 'project-updates', label: '更新记录' }
-                ],
                 'contact.html': [
                     { id: 'contact-overview', label: '联系信息' }
                 ]
@@ -175,14 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     { page: 'service-risk-compliance-forensics.html', path: 'service-risk-compliance-forensics.html', label: 'Risk, Compliance and Forensics', flyout: true },
                     { page: 'service-tax-business-consulting.html', path: 'service-tax-business-consulting.html', label: 'Tax and Business Advisory', flyout: true }
                 ],
-                'projects.html': [
-                    { id: 'projects-overview', label: 'Portfolio Overview' },
-                    { id: 'projects-updates', label: 'Update Mechanism' }
-                ],
-                'project-almaty-stadium.html': [
-                    { id: 'project-overview', label: 'Project Details' },
-                    { id: 'project-updates', label: 'Update Log' }
-                ],
                 'contact.html': [
                     { id: 'contact-overview', label: 'Contact Information' }
                 ]
@@ -201,14 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     { page: 'service-strategy-deals.html', path: 'service-strategy-deals.html', label: 'Стратегия и сделки', flyout: true },
                     { page: 'service-risk-compliance-forensics.html', path: 'service-risk-compliance-forensics.html', label: 'Риски, комплаенс и форензика', flyout: true },
                     { page: 'service-tax-business-consulting.html', path: 'service-tax-business-consulting.html', label: 'Налоговый и бизнес-консалтинг', flyout: true }
-                ],
-                'projects.html': [
-                    { id: 'projects-overview', label: 'Обзор проектов' },
-                    { id: 'projects-updates', label: 'Механизм обновлений' }
-                ],
-                'project-almaty-stadium.html': [
-                    { id: 'project-overview', label: 'Детали проекта' },
-                    { id: 'project-updates', label: 'Журнал обновлений' }
                 ],
                 'contact.html': [
                     { id: 'contact-overview', label: 'Контактная информация' }
@@ -605,7 +555,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     ensurePageSectionIds();
     ensureServiceDetailLangSwitch();
-    applyProjectsVisibility();
     applySiteFavicon();
     installNavSectionDropdowns();
     restorePendingSectionJump();
@@ -627,21 +576,22 @@ document.addEventListener('DOMContentLoaded', () => {
         el.textContent = el.textContent.replace(/\b20\d{2}\b/, String(currentYear));
     });
 
-    // Navbar scroll effect
+    // Navbar scroll effect (class toggle + rAF throttle).
     const header = document.querySelector('header');
     const updateHeader = () => {
-        if (window.scrollY > 20) {
-            header.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
-            header.style.boxShadow = '0 5px 20px rgba(0,0,0,0.05)';
-            header.style.padding = '1rem 5%';
-        } else {
-            header.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-            header.style.boxShadow = 'none';
-            header.style.padding = '2rem 5%';
-        }
+        if (!header) return;
+        header.classList.toggle('is-scrolled', window.scrollY > 20);
     };
-
-    window.addEventListener('scroll', updateHeader);
+    let headerScrollTicking = false;
+    const onHeaderScroll = () => {
+        if (headerScrollTicking) return;
+        headerScrollTicking = true;
+        requestAnimationFrame(() => {
+            updateHeader();
+            headerScrollTicking = false;
+        });
+    };
+    window.addEventListener('scroll', onHeaderScroll, { passive: true });
     updateHeader(); // Initial check
 
     // Intersection Observer for fade-in animations

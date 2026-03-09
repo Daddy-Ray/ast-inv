@@ -27,7 +27,7 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-attachment: fixed;
+    background-attachment: scroll;
     overflow-x: hidden;
 }
 
@@ -80,6 +80,12 @@ header {
     top: 0;
     z-index: 1000;
     transition: var(--transition);
+}
+
+header.is-scrolled {
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    padding: 1rem 5%;
 }
 
 .logo-container {
@@ -385,16 +391,8 @@ body.page-services.page-service-full-chain {
     background-position: center 42%;
 }
 
-body.page-projects {
-    background-image: linear-gradient(rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.78)), url("../assets/backgrounds/projects-business.jpg");
-}
-
 body.page-contact {
     background-image: linear-gradient(rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.78)), url("../assets/backgrounds/contact-business.jpg");
-}
-
-body.page-project-detail {
-    background-image: linear-gradient(rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.78)), url("../assets/backgrounds/project-detail-business.jpg");
 }
 
 /* Remove section-level image backgrounds to keep one image per page */
