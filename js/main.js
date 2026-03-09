@@ -255,7 +255,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const renderEntry = (entry, targetContainer) => {
                 const item = document.createElement('a');
                 const targetPage = entry.page || pageKey;
-                const targetPath = entry.path || href.split('#')[0];
+                const hrefPath = href.split('#')[0];
+                const slashIdx = hrefPath.lastIndexOf('/');
+                const baseDir = slashIdx >= 0 ? hrefPath.slice(0, slashIdx + 1) : '';
+                const targetPath = entry.path
+                    ? (entry.path.includes('/') ? entry.path : `${baseDir}${entry.path}`)
+                    : hrefPath;
                 item.href = entry.id ? `${targetPath}#${entry.id}` : targetPath;
                 item.textContent = entry.label;
                 item.dataset.page = targetPage;
