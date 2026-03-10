@@ -213,6 +213,7 @@
 
         if (!this.options.config.showLines) return;
 
+        var now = typeof ts === "number" ? ts : performance.now();
         var map = this.map;
         var self = this;
 
@@ -251,6 +252,33 @@
                 }
                 ctx.stroke();
             }
+
+            // Trade-flow animation: bidirectional moving light dots.
+            var speed = 0.000072 + (state.node.value / 230000);
+            var phase = (now * speed) % 1;
+            var reversePhase = (1 - phase + 1) % 1;
+            var posForward = pointOnQuadratic(fromPt, ctrlPt, toPt, phase);
+            var posForward2 = pointOnQuadratic(fromPt, ctrlPt, toPt, (phase + 0.45) % 1);
+            var posReverse = pointOnQuadratic(fromPt, ctrlPt, toPt, reversePhase);
+
+            var dotRadius = highlight ? 3.0 : 2.4;
+            var glowRadius = dotRadius + (highlight ? 4.2 : 3.2);
+
+            function drawFlowDot(pos, coreColor, glowColor) {
+                ctx.beginPath();
+                ctx.fillStyle = glowColor;
+                ctx.arc(pos.x, pos.y, glowRadius, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.fillStyle = coreColor;
+                ctx.arc(pos.x, pos.y, dotRadius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            drawFlowDot(posForward, "rgba(255,255,255,0.95)", highlight ? "rgba(205,33,42,0.34)" : "rgba(0,140,69,0.28)");
+            drawFlowDot(posForward2, "rgba(255,246,214,0.9)", highlight ? "rgba(205,33,42,0.26)" : "rgba(255,185,88,0.22)");
+            drawFlowDot(posReverse, "rgba(255,232,236,0.9)", "rgba(205,33,42,0.22)");
         });
     };
 

@@ -21,14 +21,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return file || 'index.html';
     };
 
+    const serviceDetailPages = new Set([
+        'service-full-chain.html',
+        'service-strategy-deals.html',
+        'service-risk-compliance-forensics.html',
+        'service-tax-business-consulting.html'
+    ]);
+
     const ensureServiceDetailLangSwitch = () => {
         const page = getCurrentPageKey();
-        const serviceDetailPages = new Set([
-            'service-full-chain.html',
-            'service-strategy-deals.html',
-            'service-risk-compliance-forensics.html',
-            'service-tax-business-consulting.html'
-        ]);
         if (!serviceDetailPages.has(page)) return;
 
         const navList = document.querySelector('header nav > ul');
@@ -78,6 +79,16 @@ document.addEventListener('DOMContentLoaded', () => {
         switchItem.appendChild(current);
         switchItem.appendChild(dropdown);
         navList.appendChild(switchItem);
+    };
+
+    const applyServiceDetailSecondaryButtons = () => {
+        const page = getCurrentPageKey();
+        if (!serviceDetailPages.has(page)) return;
+
+        const ctaLinks = document.querySelectorAll('section.services > p a.btn');
+        ctaLinks.forEach((link) => {
+            link.classList.add('btn-secondary');
+        });
     };
 
     const ensurePageSectionIds = () => {
@@ -550,6 +561,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     ensurePageSectionIds();
     ensureServiceDetailLangSwitch();
+    applyServiceDetailSecondaryButtons();
     applySiteFavicon();
     installNavSectionDropdowns();
     restorePendingSectionJump();
