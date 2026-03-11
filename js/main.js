@@ -225,24 +225,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return item;
             };
 
-            const mainItems = mainEntries.map((entry) => ({
-                entry,
-                element: renderEntry(entry, submenu)
-            }));
-
-            if (flyoutEntries.length) {
-                li.classList.add('nav-with-flyout');
-                const flyoutTriggerItem = mainItems.find((item) => item.entry.id === 'services') || mainItems[0];
-                const flyout = document.createElement('div');
-                flyout.className = 'nav-submenu-flyout';
-                flyoutEntries.forEach((entry) => renderEntry(entry, flyout));
-                if (flyoutTriggerItem && flyoutTriggerItem.element) {
-                    flyoutTriggerItem.element.classList.add('nav-flyout-trigger');
-                    flyoutTriggerItem.element.insertAdjacentElement('afterend', flyout);
-                } else {
-                    submenu.appendChild(flyout);
-                }
-            }
+            const directEntries = flyoutEntries.length ? flyoutEntries : mainEntries;
+            directEntries.forEach((entry) => renderEntry(entry, submenu));
             li.appendChild(submenu);
         });
 

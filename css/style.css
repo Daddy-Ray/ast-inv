@@ -373,6 +373,12 @@ nav a:hover::before {
     background-repeat: no-repeat;
 }
 
+/* Prevent fixed header from overlapping hero title on EN/RU homepages */
+html[lang="en"] body.page-home .hero,
+html[lang="ru"] body.page-home .hero {
+    padding-top: clamp(7.5rem, 9vw, 9rem);
+}
+
 /* One background image per page */
 body.page-home {
     background-image: linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)), url("../assets/backgrounds/home-business.jpg");
@@ -572,6 +578,17 @@ body.page-contact {
     box-sizing: border-box;
 }
 
+.zh-hero-actions .btn {
+    width: 300px !important;
+    min-width: 300px !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap !important;
+    box-sizing: border-box;
+}
+
 @media (max-width: 1024px) {
     .hero-layout {
         grid-template-columns: 1fr;
@@ -592,6 +609,11 @@ body.page-contact {
     }
 
     .ru-hero-actions .btn {
+        width: auto !important;
+        min-width: 0 !important;
+    }
+
+    .zh-hero-actions .btn {
         width: auto !important;
         min-width: 0 !important;
     }

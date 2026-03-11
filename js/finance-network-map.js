@@ -24,6 +24,8 @@
     var defaultCopy = {
         overviewTitle: "Capital Network Overview",
         overviewDesc: "Headquartered in Almaty, the network extends to strategic regional markets through capital, supply-chain and project collaboration.",
+        networkCardTitle: "Capital Network",
+        networkCardDesc: "Cross-regional links across Gulf, Europe, and Asia-Pacific markets.",
         hqTooltip: "Headquarters \u2013 Almaty",
         hqMiniLabel: "Almaty",
         hqTitle: "Headquarters \u2013 Almaty",
@@ -323,22 +325,51 @@
         });
         var initialZoom = map.getZoom();
         var centerLatLng = L.latLng(ALMATY[0], ALMATY[1]);
-        var preferredZoom = initialZoom + 0.55;
+        var preferredZoom = initialZoom + 0.9;
         map.setView(centerLatLng, preferredZoom, { animate: false });
         var visibleBounds = map.getBounds();
         var allVisible = allPoints.every(function (pt) {
             return visibleBounds.contains(pt);
         });
         if (!allVisible) {
-            map.setView(centerLatLng, initialZoom, { animate: false });
+            // Step down zoom progressively to guarantee all target nodes remain visible.
+            var candidateZoom = preferredZoom;
+            var minZoom = initialZoom;
+            var safety = 0;
+            while (!allVisible && candidateZoom > minZoom && safety < 8) {
+                candidateZoom -= 0.12;
+                map.setView(centerLatLng, candidateZoom, { animate: false });
+                visibleBounds = map.getBounds();
+                allVisible = allPoints.every(function (pt) {
+                    return visibleBounds.contains(pt);
+                });
+                safety += 1;
+            }
+            if (!allVisible) {
+                map.setView(centerLatLng, initialZoom, { animate: false });
+            }
         }
         initialZoom = map.getZoom();
 
-        var infoCard = container.parentElement.querySelector(".finance-map-info");
+        var mapShell = container.parentElement;
+        var infoCard = mapShell.querySelector(".finance-map-info");
+        var summaryCard = mapShell.querySelector(".finance-map-summary");
         var activeInfo = null;
         var suppressClearOnce = false;
         var labelLayers = [];
         var miniLabelActions = {};
+
+        if (!summaryCard) {
+            summaryCard = document.createElement("div");
+            summaryCard.className = "finance-map-summary";
+            mapShell.appendChild(summaryCard);
+        }
+        summaryCard.innerHTML = "<p>" + (copy.networkCardDesc || copy.overviewDesc) + "</p>";
+
+        function setSummaryVisible(visible) {
+            if (!summaryCard) return;
+            summaryCard.classList.toggle("is-hidden", !visible);
+        }
 
         function suppressNextClear() {
             suppressClearOnce = true;
@@ -380,6 +411,7 @@
             if (!infoCard) return;
             activeInfo = { title: title, desc: desc, latlng: latlng, image: image || "", caption: caption || "" };
             setMiniLabelsVisible(false);
+            setSummaryVisible(false);
             renderInfoCard();
         }
 
@@ -389,6 +421,7 @@
             activeInfo = null;
             infoCard.classList.remove("active");
             setMiniLabelsVisible(true);
+            setSummaryVisible(true);
         }
 
         function setMiniLabelsVisible(visible) {
@@ -482,7 +515,6 @@
             map.getContainer().style.cursor = "";
         });
 
-        var mapShell = container.parentElement;
         var resetBtn = mapShell.querySelector(".finance-map-reset-btn");
         if (!resetBtn) {
             resetBtn = document.createElement("button");
