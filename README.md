@@ -1,6 +1,7 @@
 # AST Website Maintenance Notes
 
 - Chinese version: `README.zh-CN.md`
+- Operations runbook: `OPERATIONS.md`
 
 ## Chinese Content Workflow (anti-garbled)
 
