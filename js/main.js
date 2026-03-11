@@ -21,6 +21,62 @@ document.addEventListener('DOMContentLoaded', () => {
         return file || 'index.html';
     };
 
+    const installStructuredData = () => {
+        const siteUrl = 'https://www.ast-inv.hk';
+        const pathName = window.location.pathname || '/index.html';
+        const normalizedPath = pathName.endsWith('/') ? `${pathName}index.html` : pathName;
+        const pathLower = normalizedPath.toLowerCase();
+        const isSrcPage = pathLower.includes('/en-src/') || pathLower.includes('/zh-src/') || pathLower.includes('/ru-src/');
+        if (isSrcPage) return;
+
+        const currentFile = normalizedPath.split('/').pop() || 'index.html';
+        const urlPath = normalizedPath.startsWith('/') ? normalizedPath : `/${normalizedPath}`;
+        const pageUrl = `${siteUrl}${urlPath}`;
+
+        document.querySelectorAll('script[type="application/ld+json"][data-ast-seo="jsonld"]').forEach((el) => el.remove());
+
+        const orgSchema = {
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: 'AST Investing of Hong Kong',
+            url: siteUrl,
+            logo: `${siteUrl}/assets/logo.png`,
+            email: 'ast@ast-inv.hk'
+        };
+
+        const schemaList = [orgSchema];
+        const pageKey = currentFile.toLowerCase();
+        if (pageKey === 'index.html') {
+            schemaList.push({
+                '@context': 'https://schema.org',
+                '@type': 'WebSite',
+                name: 'AST Investing of Hong Kong',
+                url: pageUrl,
+                inLanguage: (document.documentElement.lang || 'en')
+            });
+        }
+        if (pageKey === 'services.html' || pageKey.startsWith('service-')) {
+            schemaList.push({
+                '@context': 'https://schema.org',
+                '@type': 'Service',
+                serviceType: 'International investment and capital advisory',
+                provider: {
+                    '@type': 'Organization',
+                    name: 'AST Investing of Hong Kong'
+                },
+                areaServed: ['Europe', 'Asia-Pacific', 'Middle East']
+            });
+        }
+
+        schemaList.forEach((schemaObj) => {
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.dataset.astSeo = 'jsonld';
+            script.textContent = JSON.stringify(schemaObj);
+            document.head.appendChild(script);
+        });
+    };
+
     const serviceDetailPages = new Set([
         'service-full-chain.html',
         'service-strategy-deals.html',
@@ -544,6 +600,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     ensurePageSectionIds();
+    installStructuredData();
     ensureServiceDetailLangSwitch();
     applyServiceDetailSecondaryButtons();
     applySiteFavicon();

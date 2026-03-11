@@ -1,5 +1,7 @@
 # AST Website Maintenance Notes
 
+- Chinese version: `README.zh-CN.md`
+
 ## Chinese Content Workflow (anti-garbled)
 
 - Edit Chinese pages in `zh-src/*.html` (UTF-8 source files).
@@ -21,4 +23,24 @@
 - If it reports problems, first sync Chinese source from current clean pages:
   - `powershell -ExecutionPolicy Bypass -File .\tools\encoding-guard.ps1 -FixZhSrcFromZh`
 - Then run check again until it passes.
+
+## One-Command Preflight Check
+
+- Run full preflight checks (Lighthouse, 404 links, HTML validate, encoding, SEO sync):
+  - `powershell -ExecutionPolicy Bypass -File .\tools\preflight.ps1`
+- If you want the script to auto-start local server:
+  - `powershell -ExecutionPolicy Bypass -File .\tools\preflight.ps1 -StartServer`
+- If needed, skip SEO sync check:
+  - `powershell -ExecutionPolicy Bypass -File .\tools\preflight.ps1 -SkipSeoSync`
+- Reports are written to:
+  - `.\reports\`
+  - Includes `preflight-summary.txt` and detailed outputs.
+
+## SEO Sync Check (live vs -src)
+
+- Verify `en/zh/ru` and `en-src/zh-src/ru-src` are aligned:
+  - same page files exist on both sides
+  - `canonical` and `hreflang` tags match expected production URLs
+- Run:
+  - `powershell -ExecutionPolicy Bypass -File .\tools\seo-sync-check.ps1`
 
