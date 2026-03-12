@@ -21,6 +21,289 @@ document.addEventListener('DOMContentLoaded', () => {
         return file || 'index.html';
     };
 
+    const getCurrentLang = () => {
+        const langRaw = (document.documentElement.lang || 'en').toLowerCase();
+        if (langRaw.startsWith('zh')) return 'zh';
+        if (langRaw.startsWith('ru')) return 'ru';
+        return 'en';
+    };
+
+    const getServiceFaqEntries = (lang, pageKey) => {
+        const map = {
+            en: {
+                'service-full-chain.html': {
+                    title: 'Frequently Asked Questions',
+                    intro: 'Key questions clients often ask before starting an end-to-end operations engagement.',
+                    items: [
+                        {
+                            q: 'What stage can we engage AST for end-to-end operations?',
+                            a: 'Engagement can start from pre-investment screening, transaction execution, or post-investment optimization. We tailor scope to your current stage.'
+                        },
+                        {
+                            q: 'Which industries are most suitable for this service?',
+                            a: 'Typical sectors include resources, infrastructure, logistics, industrial assets, and mixed-use real estate projects with multi-party coordination needs.'
+                        },
+                        {
+                            q: 'What outcomes are usually targeted in the first phase?',
+                            a: 'Initial milestones focus on governance alignment, execution rhythm, risk controls, and measurable operating improvements.'
+                        },
+                        {
+                            q: 'Can this service be combined with tax and compliance support?',
+                            a: 'Yes. End-to-end operations can be integrated with risk, compliance, forensics, and tax advisory for a unified execution model.'
+                        }
+                    ]
+                },
+                'service-strategy-deals.html': {
+                    title: 'Frequently Asked Questions',
+                    intro: 'Typical decision questions around strategy design and transaction execution.',
+                    items: [
+                        {
+                            q: 'Do you support both buy-side and sell-side transactions?',
+                            a: 'Yes. We support strategic options review, transaction structuring, diligence coordination, and negotiation support for both sides.'
+                        },
+                        {
+                            q: 'How do you assess transaction feasibility?',
+                            a: 'We evaluate strategic fit, capital structure, operational readiness, risk exposure, and value-creation pathways before execution.'
+                        },
+                        {
+                            q: 'What is included in post-deal support?',
+                            a: 'Post-deal support covers integration priorities, control framework setup, synergy tracking, and transition risk management.'
+                        },
+                        {
+                            q: 'Can AST work with internal legal and finance teams?',
+                            a: 'Yes. We work as a coordinated layer with internal teams and external advisors to keep decision and execution aligned.'
+                        }
+                    ]
+                },
+                'service-risk-compliance-forensics.html': {
+                    title: 'Frequently Asked Questions',
+                    intro: 'Core questions clients ask about risk control and compliance assurance.',
+                    items: [
+                        {
+                            q: 'When should a risk and compliance review start?',
+                            a: 'It should begin before major commitments and continue through execution, especially in cross-border or multi-jurisdiction projects.'
+                        },
+                        {
+                            q: 'What does forensics support include?',
+                            a: 'Forensics support includes fact-pattern review, anomaly tracing, control-gap analysis, and evidence-oriented reporting for management decisions.'
+                        },
+                        {
+                            q: 'How are high-priority risks identified?',
+                            a: 'Risks are prioritized by impact, probability, control maturity, and timeline sensitivity, then translated into action-ready mitigation steps.'
+                        },
+                        {
+                            q: 'Can compliance frameworks be adapted by country?',
+                            a: 'Yes. We localize control requirements and reporting practices to match jurisdictional rules and operating realities.'
+                        }
+                    ]
+                },
+                'service-tax-business-consulting.html': {
+                    title: 'Frequently Asked Questions',
+                    intro: 'Key tax and business advisory topics for cross-border investments.',
+                    items: [
+                        {
+                            q: 'Which clients typically need this service?',
+                            a: 'It is commonly used by companies with cross-border structures, regional holding entities, and transactions requiring multi-market tax alignment.'
+                        },
+                        {
+                            q: 'Can tax planning and business restructuring be done together?',
+                            a: 'Yes. We design tax and business solutions in one framework to reduce friction between legal, financial, and operating decisions.'
+                        },
+                        {
+                            q: 'What are common priorities in the first advisory cycle?',
+                            a: 'Typical priorities include structure diagnosis, tax exposure mapping, compliance roadmap, and implementation sequencing.'
+                        },
+                        {
+                            q: 'Do you provide implementation follow-through?',
+                            a: 'Yes. We support execution tracking, policy updates, and ongoing coordination with finance, legal, and external tax teams.'
+                        }
+                    ]
+                }
+            },
+            zh: {
+                'service-full-chain.html': {
+                    title: '常见问题',
+                    intro: '以下是客户在启动全链运营服务前最常咨询的核心问题。',
+                    items: [
+                        {
+                            q: '全链运营服务可以从项目哪个阶段开始？',
+                            a: '可从投前研判、交易执行或投后优化任一阶段切入，并按当前进度定制服务范围。'
+                        },
+                        {
+                            q: '哪些行业更适合这项服务？',
+                            a: '资源、基础设施、物流、工业资产及复合型地产等多主体协同项目通常更能发挥该服务价值。'
+                        },
+                        {
+                            q: '首阶段一般先实现哪些结果？',
+                            a: '通常先聚焦治理机制对齐、执行节奏梳理、关键风险管控及可量化运营改进。'
+                        },
+                        {
+                            q: '是否能与税务和合规服务联动？',
+                            a: '可以。可与风险、合规、法证及税务咨询统一集成，形成一体化执行框架。'
+                        }
+                    ]
+                },
+                'service-strategy-deals.html': {
+                    title: '常见问题',
+                    intro: '以下问题覆盖战略与企业交易服务中的高频决策场景。',
+                    items: [
+                        {
+                            q: '是否同时支持买方和卖方交易？',
+                            a: '支持。可提供战略选项评估、交易结构设计、尽调协同及谈判支持。'
+                        },
+                        {
+                            q: '交易可行性通常如何判断？',
+                            a: '从战略匹配、资本结构、运营承接、风险暴露及增值路径等维度进行综合评估。'
+                        },
+                        {
+                            q: '交易完成后还会提供哪些支持？',
+                            a: '包含整合优先级设计、管控体系搭建、协同价值跟踪及过渡期风险管理。'
+                        },
+                        {
+                            q: '能否与企业内部法务和财务团队协同？',
+                            a: '可以。通过统一项目节奏与决策口径，确保内外部团队执行一致。'
+                        }
+                    ]
+                },
+                'service-risk-compliance-forensics.html': {
+                    title: '常见问题',
+                    intro: '以下是风险、合规与法证服务中最常见的咨询问题。',
+                    items: [
+                        {
+                            q: '风险与合规评估应在什么时候启动？',
+                            a: '建议在重大决策前启动，并贯穿执行全周期，尤其适用于跨区域和多法域场景。'
+                        },
+                        {
+                            q: '法证支持通常包含哪些内容？',
+                            a: '通常包括异常线索核查、事实链梳理、控制缺口识别及可用于管理决策的报告输出。'
+                        },
+                        {
+                            q: '高优先级风险如何识别？',
+                            a: '按影响程度、发生概率、控制成熟度和时间敏感性分级，形成可执行整改路径。'
+                        },
+                        {
+                            q: '合规框架是否能按不同国家调整？',
+                            a: '可以。会结合各地监管要求和实际经营环境进行本地化配置。'
+                        }
+                    ]
+                },
+                'service-tax-business-consulting.html': {
+                    title: '常见问题',
+                    intro: '以下为税务与商务咨询服务中的常见问题与对应思路。',
+                    items: [
+                        {
+                            q: '哪些企业更适合这项服务？',
+                            a: '涉及跨境架构、区域控股安排或多市场交易协同的企业更需要该服务支持。'
+                        },
+                        {
+                            q: '税务筹划和业务重构可以同步推进吗？',
+                            a: '可以。通过一体化设计减少法务、财务与经营决策之间的摩擦。'
+                        },
+                        {
+                            q: '首轮咨询通常优先处理什么？',
+                            a: '通常先做架构诊断、税务暴露梳理、合规路线设计和实施节奏规划。'
+                        },
+                        {
+                            q: '是否提供落地执行阶段支持？',
+                            a: '提供。可持续跟踪执行进度，并协同财务、法务及外部税务团队。'
+                        }
+                    ]
+                }
+            },
+            ru: {
+                'service-full-chain.html': {
+                    title: 'Часто задаваемые вопросы',
+                    intro: 'Ключевые вопросы, которые чаще всего возникают перед запуском комплексного операционного сопровождения.',
+                    items: [
+                        {
+                            q: 'С какого этапа можно подключить услугу комплексного сопровождения?',
+                            a: 'Подключение возможно на этапе прединвестиционной оценки, в процессе сделки или на стадии постинвестиционной оптимизации.'
+                        },
+                        {
+                            q: 'Для каких отраслей услуга наиболее актуальна?',
+                            a: 'Наиболее частые кейсы связаны с ресурсами, инфраструктурой, логистикой, промышленными активами и многофункциональной недвижимостью.'
+                        },
+                        {
+                            q: 'Какие результаты обычно ожидаются на первом этапе?',
+                            a: 'Обычно фокус делается на выравнивании управленческой модели, ритма исполнения, контроле рисков и измеримых операционных улучшениях.'
+                        },
+                        {
+                            q: 'Можно ли объединить сопровождение с налоговым и комплаенс-блоком?',
+                            a: 'Да, услуга интегрируется с риск-менеджментом, комплаенсом, форензикой и налоговым контуром в единую модель реализации.'
+                        }
+                    ]
+                },
+                'service-strategy-deals.html': {
+                    title: 'Часто задаваемые вопросы',
+                    intro: 'Типовые вопросы по стратегии и корпоративным сделкам.',
+                    items: [
+                        {
+                            q: 'Поддерживаете ли вы сделки как со стороны покупателя, так и продавца?',
+                            a: 'Да. Поддержка включает стратегическую оценку, структурирование сделки, координацию due diligence и сопровождение переговоров.'
+                        },
+                        {
+                            q: 'Как оценивается реализуемость сделки?',
+                            a: 'Оценка строится на стратегической совместимости, капитальной структуре, готовности операционной модели и потенциале роста стоимости.'
+                        },
+                        {
+                            q: 'Что входит в сопровождение после закрытия сделки?',
+                            a: 'Включает приоритизацию интеграции, настройку контрольной модели, мониторинг синергий и управление переходными рисками.'
+                        },
+                        {
+                            q: 'Можно ли работать совместно с внутренними командами компании?',
+                            a: 'Да. Работа организуется как координационный контур между внутренними и внешними участниками для согласованного исполнения.'
+                        }
+                    ]
+                },
+                'service-risk-compliance-forensics.html': {
+                    title: 'Часто задаваемые вопросы',
+                    intro: 'Ключевые вопросы по рискам, комплаенсу и форензик-поддержке.',
+                    items: [
+                        {
+                            q: 'Когда лучше запускать оценку рисков и комплаенса?',
+                            a: 'Оптимально начинать до принятия крупных обязательств и сопровождать процесс на всем цикле исполнения, особенно в трансграничных проектах.'
+                        },
+                        {
+                            q: 'Что обычно включает форензик-поддержка?',
+                            a: 'Как правило, включает проверку аномалий, анализ фактических цепочек, выявление контрольных разрывов и отчетность для управленческих решений.'
+                        },
+                        {
+                            q: 'Как определяются приоритетные риски?',
+                            a: 'Приоритизация строится по влиянию, вероятности, зрелости контроля и временной чувствительности, после чего формируется план действий.'
+                        },
+                        {
+                            q: 'Можно ли адаптировать комплаенс-контур под разные страны?',
+                            a: 'Да, модель адаптируется под требования конкретной юрисдикции и практические условия работы.'
+                        }
+                    ]
+                },
+                'service-tax-business-consulting.html': {
+                    title: 'Часто задаваемые вопросы',
+                    intro: 'Частые вопросы по налоговому и бизнес-консалтингу в трансграничных проектах.',
+                    items: [
+                        {
+                            q: 'Каким компаниям чаще всего нужна эта услуга?',
+                            a: 'Обычно это компании с трансграничной структурой, региональными холдингами и сделками, требующими согласования налоговой логики между рынками.'
+                        },
+                        {
+                            q: 'Можно ли совмещать налоговое планирование и бизнес-реорганизацию?',
+                            a: 'Да. Интегрированный подход снижает несогласованность между юридическими, финансовыми и операционными решениями.'
+                        },
+                        {
+                            q: 'Какие задачи ставятся в первом цикле консультаций?',
+                            a: 'Обычно это диагностика структуры, карта налоговых рисков, дорожная карта комплаенса и этапность внедрения.'
+                        },
+                        {
+                            q: 'Предусмотрено ли сопровождение на этапе внедрения?',
+                            a: 'Да, предусмотрено сопровождение исполнения, обновления регламентов и координация с профильными внутренними и внешними командами.'
+                        }
+                    ]
+                }
+            }
+        };
+        return (map[lang] && map[lang][pageKey]) || null;
+    };
+
     const installStructuredData = () => {
         const siteUrl = 'https://www.ast-inv.hk';
         const pathName = window.location.pathname || '/index.html';
@@ -65,6 +348,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     name: 'AST Investing of Hong Kong'
                 },
                 areaServed: ['Europe', 'Asia-Pacific', 'Middle East']
+            });
+        }
+
+        const lang = getCurrentLang();
+        const faqData = getServiceFaqEntries(lang, pageKey);
+        if (faqData && Array.isArray(faqData.items) && faqData.items.length) {
+            schemaList.push({
+                '@context': 'https://schema.org',
+                '@type': 'FAQPage',
+                mainEntity: faqData.items.map((item) => ({
+                    '@type': 'Question',
+                    name: item.q,
+                    acceptedAnswer: {
+                        '@type': 'Answer',
+                        text: item.a
+                    }
+                }))
             });
         }
 
@@ -145,6 +445,42 @@ document.addEventListener('DOMContentLoaded', () => {
         ctaLinks.forEach((link) => {
             link.classList.add('btn-secondary');
         });
+    };
+
+    const installServiceFaqs = () => {
+        const page = getCurrentPageKey();
+        if (!serviceDetailPages.has(page)) return;
+        const lang = getCurrentLang();
+        const faqData = getServiceFaqEntries(lang, page);
+        if (!faqData || !faqData.items || !faqData.items.length) return;
+
+        const servicesSection = document.querySelector('section.services');
+        if (!servicesSection || servicesSection.querySelector('.service-faq-section')) return;
+
+        const faqBlock = document.createElement('div');
+        faqBlock.className = 'service-faq-section';
+        faqBlock.innerHTML = `
+            <div class="section-header">
+                <h2>${faqData.title}</h2>
+                <p>${faqData.intro}</p>
+            </div>
+            <div class="service-grid service-grid-four">
+                ${faqData.items.map((item) => `
+                    <div class="service-card">
+                        <h3>${item.q}</h3>
+                        <p>${item.a}</p>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
+        const children = Array.from(servicesSection.children);
+        const cta = children.find((el) => el.tagName === 'P' && el.querySelector('a.btn'));
+        if (cta) {
+            servicesSection.insertBefore(faqBlock, cta);
+        } else {
+            servicesSection.appendChild(faqBlock);
+        }
     };
 
     const ensurePageSectionIds = () => {
@@ -600,6 +936,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     ensurePageSectionIds();
+    installServiceFaqs();
     installStructuredData();
     ensureServiceDetailLangSwitch();
     applyServiceDetailSecondaryButtons();

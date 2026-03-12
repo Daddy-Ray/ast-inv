@@ -791,6 +791,10 @@ body.page-contact {
     grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.service-faq-section {
+    margin-top: 2.5rem;
+}
+
 .service-icon {
     font-size: 3.5rem;
     color: var(--secondary-color);
