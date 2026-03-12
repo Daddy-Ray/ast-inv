@@ -795,6 +795,111 @@ body.page-contact {
     margin-top: 2.5rem;
 }
 
+.legal-page-section .section-header {
+    max-width: 900px;
+    margin-bottom: 2rem;
+}
+
+.legal-content {
+    max-width: 980px;
+}
+
+.legal-subnav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin: 0 0 1.2rem;
+}
+
+.legal-subnav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.82rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    color: var(--text-color);
+}
+
+.legal-subnav a:hover {
+    border-color: rgba(0, 140, 69, 0.35);
+    color: var(--secondary-color);
+}
+
+.legal-subnav a.is-active {
+    background: rgba(205, 33, 42, 0.12);
+    border-color: rgba(205, 33, 42, 0.35);
+    color: var(--accent-color);
+}
+
+.legal-intro {
+    margin-bottom: 1.2rem;
+}
+
+.legal-clause {
+    margin-bottom: 1.1rem;
+}
+
+.legal-clause h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.45rem;
+    color: var(--brand-dark);
+}
+
+.legal-clause p {
+    margin-bottom: 0;
+}
+
+.legal-note {
+    margin-top: 1.2rem;
+    padding-left: 0.8rem;
+    border-left: 2px solid rgba(0, 140, 69, 0.32);
+    color: rgba(51, 65, 85, 0.92);
+}
+
+.legal-actions {
+    margin-top: 2rem;
+}
+
+@media (max-width: 640px) {
+    .legal-subnav {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        padding-bottom: 0.2rem;
+        /* Edge fade hint to indicate horizontal scrolling */
+        -webkit-mask-image: linear-gradient(
+            to right,
+            transparent 0,
+            #000 16px,
+            #000 calc(100% - 16px),
+            transparent 100%
+        );
+        mask-image: linear-gradient(
+            to right,
+            transparent 0,
+            #000 16px,
+            #000 calc(100% - 16px),
+            transparent 100%
+        );
+    }
+
+    .legal-subnav a {
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+
+    .legal-subnav::-webkit-scrollbar {
+        height: 5px;
+    }
+}
+
 .service-icon {
     font-size: 3.5rem;
     color: var(--secondary-color);

@@ -383,6 +383,161 @@ document.addEventListener('DOMContentLoaded', () => {
         'service-risk-compliance-forensics.html',
         'service-tax-business-consulting.html'
     ]);
+    const legalPages = new Set([
+        'privacy-policy.html',
+        'terms-of-use.html',
+        'disclaimer.html'
+    ]);
+
+    const getLegalPageContent = (lang, page) => {
+        const map = {
+            zh: {
+                'privacy-policy.html': {
+                    title: '隐私政策',
+                    effective: '生效日期：2026年3月2日',
+                    intro: '本政策用于说明阿斯特香港投資有限公司在网站运营中如何收集、使用、保存与保护信息。我们坚持最小必要、用途明确与风险可控原则，并在适用法律范围内保障用户合法权益。',
+                    clauses: [
+                        ['信息收集范围', '我们可能收集您主动提交的姓名、联系方式、企业信息、项目资料，以及网站访问产生的基础技术数据（如设备信息、访问日志、浏览行为）。'],
+                        ['信息使用目的', '信息将用于业务沟通、合作评估、服务优化、风险控制及履行法律法规要求，不用于与上述目的无关的处理。'],
+                        ['Cookie 与统计工具', '网站可能使用 Cookie 和统计工具以改善功能与体验。您可通过浏览器设置管理 Cookie，部分功能可能因此受限。'],
+                        ['信息共享与披露', '我们不会出售个人信息。仅在业务必要、受托服务或法律要求情况下，按最小必要原则进行披露。'],
+                        ['数据保存与安全', '我们在合理期限内保存信息，并采取技术与管理措施降低未经授权访问、泄露或篡改风险。'],
+                        ['用户权利', '在适用法律范围内，您可申请访问、更正、删除或限制处理相关信息。联系邮箱：ast@ast-inv.hk。'],
+                        ['未成年人保护', '本网站不面向未成年人。若发现误收集相关信息，我们将在核实后及时处理。'],
+                        ['政策更新', '本政策可根据法律、监管或业务变化进行更新。更新后继续使用网站视为已知悉更新内容。']
+                    ],
+                    note: '本政策用于信息透明与合规说明，不影响本公司在适用法律项下的任何权利、抗辩与责任限制主张。'
+                },
+                'terms-of-use.html': {
+                    title: '使用条款',
+                    effective: '生效日期：2026年3月2日',
+                    intro: '访问或使用本网站即表示您同意受本条款约束。若您不同意，请停止使用本网站。',
+                    clauses: [
+                        ['一般信息性质', '本网站内容仅供一般信息参考，不构成投资、法律、税务、会计或其他专业建议。'],
+                        ['不构成要约或招揽', '网站信息不构成任何投资产品、交易安排或服务的要约、推荐、承诺或招揽。'],
+                        ['用户自行判断责任', '您应基于独立判断作出决策，并在必要时咨询合资格专业顾问。由此产生的后果由您自行承担。'],
+                        ['知识产权', '除另有声明外，网站文字、图像、标识及结构均受知识产权法律保护，未经书面许可不得复制、传播或商业使用。'],
+                        ['禁止行为', '禁止以非法、误导、破坏性方式使用网站，包括未经授权访问系统、干扰网站运行或滥用网站内容。'],
+                        ['无担保声明', '在法律允许范围内，网站及其内容按“现状”提供，不对完整性、准确性、时效性或特定目的适用性作担保。'],
+                        ['责任限制', '在适用法律允许范围内，本公司对因访问、使用或无法使用本网站导致的直接、间接或后果性损失不承担责任。'],
+                        ['适用法律与争议', '本条款受香港特别行政区法律管辖。争议由香港有管辖权法院处理，法律另有强制规定除外。']
+                    ],
+                    note: '如本条款部分内容被认定无效，不影响其余条款效力。'
+                },
+                'disclaimer.html': {
+                    title: '免责声明',
+                    effective: '生效日期：2026年3月2日',
+                    intro: '本免责声明适用于您对本网站全部内容的访问、阅读、引用与使用。',
+                    clauses: [
+                        ['信息仅供一般参考', '本网站信息仅用于一般信息展示，不应被视为任何具体事项的专业建议或行动依据。'],
+                        ['非专业意见', '本网站内容不构成投资、法律、税务、会计或其他专业意见，用户应自行取得独立专业建议。'],
+                        ['前瞻性陈述风险', '涉及未来判断、预测或预期的陈述存在不确定性，实际结果可能与相关表述存在差异。'],
+                        ['第三方信息说明', '第三方资料仅供参考，不代表本公司对其准确性、完整性或时效性作出保证或背书。'],
+                        ['使用风险自担', '用户基于本网站信息作出的任何判断、交易或行动，其风险与责任均由用户自行承担。'],
+                        ['责任限制', '在法律允许范围内，本公司不对因使用或无法使用本网站信息而导致的任何损失承担责任。']
+                    ],
+                    note: '本免责声明应与使用条款及隐私政策一并理解。'
+                }
+            },
+            en: {
+                'privacy-policy.html': {
+                    title: 'Privacy Policy',
+                    effective: 'Effective date: March 2, 2026',
+                    intro: 'This policy explains how AST Investing of Hong Kong collects, uses, stores, and protects information in connection with this website.',
+                    clauses: [
+                        ['Information We Collect', 'We may collect contact details, company information, project materials, and technical usage data generated from website access.'],
+                        ['How We Use Information', 'Data is used for communication, cooperation assessment, service improvement, risk management, and legal compliance purposes.'],
+                        ['Cookies and Analytics', 'We may use cookies and analytics tools to improve website functionality and user experience. Browser settings may be used to manage cookies.'],
+                        ['Data Sharing', 'We do not sell personal data. Information may be disclosed on a need-to-know basis to service providers, advisors, or where legally required.'],
+                        ['Retention and Security', 'Information is retained only for reasonable business or legal periods and protected through appropriate technical and organizational controls.'],
+                        ['Your Rights', 'Subject to applicable law, you may request access, correction, deletion, or restriction of processing by contacting ast@ast-inv.hk.'],
+                        ['Minors', 'This website is not intended for minors. If such data is identified, we will take reasonable steps to address it.'],
+                        ['Policy Updates', 'This policy may be updated in response to legal, regulatory, or operational changes. Continued use indicates acceptance of updates.']
+                    ],
+                    note: 'This policy is for transparency and does not limit rights, defenses, or liability protections available under applicable law.'
+                },
+                'terms-of-use.html': {
+                    title: 'Terms of Use',
+                    effective: 'Effective date: March 2, 2026',
+                    intro: 'By accessing or using this website, you agree to these Terms of Use. If you do not agree, please discontinue use.',
+                    clauses: [
+                        ['General Information Only', 'Website content is provided for general informational purposes and does not constitute investment, legal, tax, accounting, or other professional advice.'],
+                        ['No Offer or Solicitation', 'Nothing on this website constitutes an offer, recommendation, commitment, or solicitation relating to any transaction, service, or investment product.'],
+                        ['User Responsibility', 'Users are solely responsible for independent judgment and should obtain qualified professional advice before making decisions.'],
+                        ['Intellectual Property', 'Unless otherwise stated, all website content is protected by intellectual property laws and may not be copied or used without prior written consent.'],
+                        ['Prohibited Conduct', 'Users must not misuse the website, attempt unauthorized access, interfere with operations, or use content for unlawful or misleading purposes.'],
+                        ['No Warranty', 'To the fullest extent permitted by law, the website and its content are provided “as is” without express or implied warranties.'],
+                        ['Limitation of Liability', 'To the extent permitted by applicable law, AST Investing of Hong Kong is not liable for direct, indirect, incidental, or consequential losses arising from website use.'],
+                        ['Governing Law and Jurisdiction', 'These terms are governed by the laws of Hong Kong. Disputes are subject to Hong Kong courts unless mandatory law requires otherwise.']
+                    ],
+                    note: 'If any provision is held invalid, remaining provisions remain enforceable.'
+                },
+                'disclaimer.html': {
+                    title: 'Disclaimer',
+                    effective: 'Effective date: March 2, 2026',
+                    intro: 'This disclaimer governs your access to and use of all content on this website.',
+                    clauses: [
+                        ['Information Nature', 'Website materials are provided for general information only and are not intended as professional or decision-ready advice.'],
+                        ['No Professional Advice', 'Content does not constitute investment, legal, tax, accounting, or other professional recommendations.'],
+                        ['Forward-Looking Statements', 'Any statements concerning future expectations are subject to uncertainty and actual outcomes may differ materially.'],
+                        ['Third-Party Information', 'Third-party references are provided for convenience and do not imply endorsement or guarantee by AST Investing of Hong Kong.'],
+                        ['Use at Own Risk', 'Users rely on website content at their own risk and remain solely responsible for evaluating its relevance and suitability.'],
+                        ['Liability Limitation', 'To the maximum extent permitted by law, AST Investing of Hong Kong disclaims liability for losses arising from use of this website.']
+                    ],
+                    note: 'This disclaimer should be read together with the Terms of Use and Privacy Policy.'
+                }
+            },
+            ru: {
+                'privacy-policy.html': {
+                    title: 'Политика конфиденциальности',
+                    effective: 'Дата вступления в силу: 2 марта 2026 г.',
+                    intro: 'Настоящая политика описывает подход AST Investing of Hong Kong к сбору, использованию, хранению и защите информации при использовании сайта.',
+                    clauses: [
+                        ['Какие данные могут собираться', 'Могут собираться контактные данные, сведения о компании, материалы по проекту и технические данные использования сайта.'],
+                        ['Цели обработки', 'Данные используются для коммуникации, оценки сотрудничества, улучшения сервиса, управления рисками и соблюдения законодательства.'],
+                        ['Cookie и аналитика', 'Сайт может использовать cookie и инструменты аналитики для улучшения функциональности. Управление cookie возможно в настройках браузера.'],
+                        ['Передача данных', 'Мы не продаем персональные данные. Передача возможна только в необходимом объеме сервис-провайдерам, консультантам или по требованию закона.'],
+                        ['Хранение и безопасность', 'Данные хранятся разумный срок для законных целей и защищаются организационными и техническими мерами.'],
+                        ['Права пользователя', 'С учетом применимого права вы можете запросить доступ, исправление, удаление или ограничение обработки: ast@ast-inv.hk.'],
+                        ['Несовершеннолетние', 'Сайт не предназначен для несовершеннолетних. При выявлении таких данных принимаются разумные меры по их удалению.'],
+                        ['Обновление политики', 'Политика может изменяться в связи с правовыми, регуляторными или операционными изменениями. Продолжение использования означает согласие с обновлениями.']
+                    ],
+                    note: 'Политика носит информационный характер и не ограничивает прав, средств защиты и ограничений ответственности, предусмотренных применимым правом.'
+                },
+                'terms-of-use.html': {
+                    title: 'Условия использования',
+                    effective: 'Дата вступления в силу: 2 марта 2026 г.',
+                    intro: 'Используя данный сайт, вы подтверждаете согласие с настоящими условиями. При несогласии следует прекратить использование сайта.',
+                    clauses: [
+                        ['Общий информационный характер', 'Содержание сайта носит общий информационный характер и не является инвестиционной, юридической, налоговой, бухгалтерской или иной профессиональной рекомендацией.'],
+                        ['Отсутствие оферты', 'Информация на сайте не является офертой, приглашением к сделке, рекомендацией или обязательством.'],
+                        ['Ответственность пользователя', 'Пользователь самостоятельно принимает решения и при необходимости обращается к квалифицированным консультантам.'],
+                        ['Интеллектуальная собственность', 'Если не указано иное, материалы сайта защищены правами интеллектуальной собственности и не могут использоваться без письменного согласия.'],
+                        ['Запрещенные действия', 'Запрещены несанкционированный доступ, вмешательство в работу сайта, а также незаконное или вводящее в заблуждение использование контента.'],
+                        ['Отсутствие гарантий', 'В максимально допустимой законом степени сайт предоставляется «как есть», без прямых или подразумеваемых гарантий.'],
+                        ['Ограничение ответственности', 'В рамках применимого права AST Investing of Hong Kong не несет ответственности за прямые, косвенные и иные убытки, связанные с использованием сайта.'],
+                        ['Применимое право и юрисдикция', 'Условия регулируются правом Гонконга. Споры рассматриваются судами Гонконга, если иное не требуется императивными нормами.']
+                    ],
+                    note: 'Недействительность отдельного положения не влияет на действительность остальных.'
+                },
+                'disclaimer.html': {
+                    title: 'Отказ от ответственности',
+                    effective: 'Дата вступления в силу: 2 марта 2026 г.',
+                    intro: 'Настоящий отказ от ответственности распространяется на весь контент сайта и его использование.',
+                    clauses: [
+                        ['Информационный характер материалов', 'Материалы сайта предназначены только для общего ознакомления и не являются профессиональным заключением.'],
+                        ['Не является профессиональной рекомендацией', 'Контент не является инвестиционной, юридической, налоговой, бухгалтерской или иной специализированной рекомендацией.'],
+                        ['Прогнозные заявления', 'Оценочные и прогнозные формулировки подвержены неопределенности, а фактические результаты могут отличаться.'],
+                        ['Материалы третьих лиц', 'Ссылки и сведения из сторонних источников приводятся для удобства и не означают их одобрение или гарантию со стороны компании.'],
+                        ['Использование на риск пользователя', 'Пользователь самостоятельно оценивает применимость информации и несет риски, связанные с ее использованием.'],
+                        ['Ограничение ответственности', 'В максимально допустимой законом степени компания не несет ответственности за убытки, вызванные использованием или невозможностью использования сайта.']
+                    ],
+                    note: 'Отказ от ответственности применяется совместно с Условиями использования и Политикой конфиденциальности.'
+                }
+            }
+        };
+        return map[lang] && map[lang][page] ? map[lang][page] : null;
+    };
 
     const ensureServiceDetailLangSwitch = () => {
         const page = getCurrentPageKey();
@@ -437,6 +592,40 @@ document.addEventListener('DOMContentLoaded', () => {
         navList.appendChild(switchItem);
     };
 
+    const ensureLegalLangSwitch = () => {
+        const page = getCurrentPageKey();
+        if (!legalPages.has(page)) return;
+        const navList = document.querySelector('header nav > ul');
+        if (!navList || navList.querySelector('.lang-switch')) return;
+
+        const path = window.location.pathname.toLowerCase();
+        const isSrcGroup = path.includes('/en-src/') || path.includes('/zh-src/') || path.includes('/ru-src/');
+        const targetDirs = isSrcGroup
+            ? { en: 'en-src', zh: 'zh-src', ru: 'ru-src' }
+            : { en: 'en', zh: 'zh', ru: 'ru' };
+
+        const lang = getCurrentLang();
+        const currentLabels = { en: 'EN', zh: '中文', ru: 'Русский' };
+        const linkLabels = { en: 'English', zh: '中文', ru: 'Русский' };
+
+        const switchItem = document.createElement('li');
+        switchItem.className = 'lang-switch';
+        const current = document.createElement('div');
+        current.className = 'lang-current';
+        current.innerHTML = `<i class="fas fa-globe"></i> ${currentLabels[lang]} <i class="fas fa-chevron-down"></i>`;
+        const dropdown = document.createElement('div');
+        dropdown.className = 'lang-dropdown';
+        ['en', 'zh', 'ru'].forEach((code) => {
+            const a = document.createElement('a');
+            a.href = `../${targetDirs[code]}/${page}`;
+            a.textContent = linkLabels[code];
+            dropdown.appendChild(a);
+        });
+        switchItem.appendChild(current);
+        switchItem.appendChild(dropdown);
+        navList.appendChild(switchItem);
+    };
+
     const applyServiceDetailSecondaryButtons = () => {
         const page = getCurrentPageKey();
         if (!serviceDetailPages.has(page)) return;
@@ -445,6 +634,50 @@ document.addEventListener('DOMContentLoaded', () => {
         ctaLinks.forEach((link) => {
             link.classList.add('btn-secondary');
         });
+    };
+
+    const installLegalFooterLinks = () => {
+        const footerContent = document.querySelector('footer .footer-content');
+        if (!footerContent || footerContent.querySelector('.footer-legal')) return;
+
+        const lang = getCurrentLang();
+        const pathLower = (window.location.pathname || '').toLowerCase();
+        const inLanguageDir = /\/(en|zh|ru)(-src)?\//.test(pathLower);
+        const linkPrefix = inLanguageDir ? '' : 'en/';
+
+        const copyMap = {
+            en: {
+                title: 'Legal & Compliance',
+                privacy: 'Privacy Policy',
+                terms: 'Terms of Use',
+                disclaimer: 'Disclaimer'
+            },
+            zh: {
+                title: '法务与合规',
+                privacy: '隐私政策',
+                terms: '使用条款',
+                disclaimer: '免责声明'
+            },
+            ru: {
+                title: 'Правовая информация',
+                privacy: 'Политика конфиденциальности',
+                terms: 'Условия использования',
+                disclaimer: 'Отказ от ответственности'
+            }
+        };
+        const copy = copyMap[lang] || copyMap.en;
+
+        const legalCol = document.createElement('div');
+        legalCol.className = 'footer-col footer-legal';
+        legalCol.innerHTML = `
+            <h4>${copy.title}</h4>
+            <ul>
+                <li><a href="${linkPrefix}privacy-policy.html">${copy.privacy}</a></li>
+                <li><a href="${linkPrefix}terms-of-use.html">${copy.terms}</a></li>
+                <li><a href="${linkPrefix}disclaimer.html">${copy.disclaimer}</a></li>
+            </ul>
+        `;
+        footerContent.appendChild(legalCol);
     };
 
     const installServiceFaqs = () => {
@@ -481,6 +714,65 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             servicesSection.appendChild(faqBlock);
         }
+    };
+
+    const installLegalPageLayout = () => {
+        const page = getCurrentPageKey();
+        if (!legalPages.has(page)) return;
+
+        const lang = getCurrentLang();
+        const content = getLegalPageContent(lang, page);
+        const servicesSection = document.querySelector('section.services');
+        if (!servicesSection || !content) return;
+
+        const legalNavLabels = {
+            zh: {
+                privacy: '隐私政策',
+                terms: '使用条款',
+                disclaimer: '免责声明'
+            },
+            en: {
+                privacy: 'Privacy Policy',
+                terms: 'Terms of Use',
+                disclaimer: 'Disclaimer'
+            },
+            ru: {
+                privacy: 'Политика конфиденциальности',
+                terms: 'Условия использования',
+                disclaimer: 'Отказ от ответственности'
+            }
+        };
+        const navCopy = legalNavLabels[lang] || legalNavLabels.en;
+
+        const homeLabels = {
+            zh: '返回主页',
+            en: 'Back to Home',
+            ru: 'Назад на главную'
+        };
+
+        servicesSection.classList.add('legal-page-section');
+        servicesSection.innerHTML = `
+            <div class="section-header">
+                <h2>${content.title}</h2>
+                <p>${content.effective}</p>
+            </div>
+            <nav class="legal-subnav" aria-label="${content.title}">
+                <a href="privacy-policy.html" class="${page === 'privacy-policy.html' ? 'is-active' : ''}">${navCopy.privacy}</a>
+                <a href="terms-of-use.html" class="${page === 'terms-of-use.html' ? 'is-active' : ''}">${navCopy.terms}</a>
+                <a href="disclaimer.html" class="${page === 'disclaimer.html' ? 'is-active' : ''}">${navCopy.disclaimer}</a>
+            </nav>
+            <article class="legal-content">
+                <p class="legal-intro">${content.intro}</p>
+                ${content.clauses.map(([title, body]) => `
+                    <section class="legal-clause">
+                        <h3>${title}</h3>
+                        <p>${body}</p>
+                    </section>
+                `).join('')}
+                <p class="legal-note">${content.note}</p>
+            </article>
+            <p class="legal-actions"><a href="index.html" class="btn btn-secondary">${homeLabels[lang] || homeLabels.en}</a></p>
+        `;
     };
 
     const ensurePageSectionIds = () => {
@@ -936,8 +1228,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     ensurePageSectionIds();
+    ensureLegalLangSwitch();
+    installLegalPageLayout();
     installServiceFaqs();
     installStructuredData();
+    installLegalFooterLinks();
     ensureServiceDetailLangSwitch();
     applyServiceDetailSecondaryButtons();
     applySiteFavicon();
