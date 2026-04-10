@@ -28,6 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'en';
     };
 
+    const getLanguageLinkPrefix = () => {
+        const pathLower = (window.location.pathname || '').toLowerCase();
+        const inLanguageDir = /\/(en|zh|ru)(-src)?\//.test(pathLower);
+        return inLanguageDir ? '' : 'en/';
+    };
+
     const getServiceFaqEntries = (lang, pageKey) => {
         const map = {
             en: {
@@ -383,6 +389,10 @@ document.addEventListener('DOMContentLoaded', () => {
         'service-risk-compliance-forensics.html',
         'service-tax-business-consulting.html'
     ]);
+    const strategyPages = new Set([
+        'markets.html',
+        'news.html'
+    ]);
     const legalPages = new Set([
         'privacy-policy.html',
         'terms-of-use.html',
@@ -634,6 +644,374 @@ document.addEventListener('DOMContentLoaded', () => {
         ctaLinks.forEach((link) => {
             link.classList.add('btn-secondary');
         });
+    };
+
+    const ensureStrategyLangSwitch = () => {
+        const page = getCurrentPageKey();
+        if (!strategyPages.has(page)) return;
+        const navList = document.querySelector('header nav > ul');
+        if (!navList || navList.querySelector('.lang-switch')) return;
+
+        const path = window.location.pathname.toLowerCase();
+        const isSrcGroup = path.includes('/en-src/') || path.includes('/zh-src/') || path.includes('/ru-src/');
+        const targetDirs = isSrcGroup
+            ? { en: 'en-src', zh: 'zh-src', ru: 'ru-src' }
+            : { en: 'en', zh: 'zh', ru: 'ru' };
+
+        const lang = getCurrentLang();
+        const currentLabels = { en: 'EN', zh: '中文', ru: 'Русский' };
+        const linkLabels = { en: 'English', zh: '中文', ru: 'Русский' };
+
+        const switchItem = document.createElement('li');
+        switchItem.className = 'lang-switch';
+        const current = document.createElement('div');
+        current.className = 'lang-current';
+        current.innerHTML = `<i class="fas fa-globe"></i> ${currentLabels[lang]} <i class="fas fa-chevron-down"></i>`;
+        const dropdown = document.createElement('div');
+        dropdown.className = 'lang-dropdown';
+        ['en', 'zh', 'ru'].forEach((code) => {
+            const a = document.createElement('a');
+            a.href = `../${targetDirs[code]}/${page}`;
+            a.textContent = linkLabels[code];
+            dropdown.appendChild(a);
+        });
+        switchItem.appendChild(current);
+        switchItem.appendChild(dropdown);
+        navList.appendChild(switchItem);
+    };
+
+    const installStrategicNavLinks = () => {
+        const lang = getCurrentLang();
+        const navList = document.querySelector('header nav > ul');
+        if (!navList) return;
+        const linkPrefix = getLanguageLinkPrefix();
+
+        const copy = {
+            en: { markets: 'Global Markets', news: 'News' },
+            zh: { markets: '全球市场', news: '新闻' },
+            ru: { markets: 'Глобальные рынки', news: 'Новости' }
+        }[lang] || { markets: 'Global Markets', news: 'News' };
+
+        const insertLink = (href, label) => {
+            const hasLink = Array.from(navList.querySelectorAll('a[href]')).some((a) => {
+                const currentHref = a.getAttribute('href') || '';
+                return currentHref.endsWith(href);
+            });
+            if (hasLink) return;
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = `${linkPrefix}${href}`;
+            a.textContent = label;
+            li.appendChild(a);
+            const contactLi = Array.from(navList.children).find((el) => {
+                const anchor = el.querySelector(':scope > a[href]');
+                if (!anchor) return false;
+                const hrefValue = anchor.getAttribute('href') || '';
+                return hrefValue.endsWith('contact.html');
+            });
+            if (contactLi) {
+                navList.insertBefore(li, contactLi);
+            } else {
+                navList.appendChild(li);
+            }
+        };
+
+        insertLink('markets.html', copy.markets);
+        insertLink('news.html', copy.news);
+
+        const footerCols = Array.from(document.querySelectorAll('footer .footer-col'));
+        const quickLinksCol = footerCols.find((col) => {
+            const heading = (col.querySelector('h4')?.textContent || '').toLowerCase();
+            return heading.includes('quick links') || heading.includes('快速链接') || heading.includes('быстрые ссылки');
+        });
+        const quickLinks = quickLinksCol?.querySelector('ul');
+        if (!quickLinks) return;
+        const appendQuickLink = (href, label) => {
+            const exists = Array.from(quickLinks.querySelectorAll('a')).some((a) => {
+                const currentHref = a.getAttribute('href') || '';
+                return currentHref.endsWith(href);
+            });
+            if (exists) return;
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = `${linkPrefix}${href}`;
+            a.textContent = label;
+            li.appendChild(a);
+            quickLinks.appendChild(li);
+        };
+        appendQuickLink('markets.html', copy.markets);
+        appendQuickLink('news.html', copy.news);
+    };
+
+    const installHomeStrategicQuickLinks = () => {
+        const page = getCurrentPageKey();
+        if (page !== 'index.html' || !document.body.classList.contains('page-home')) return;
+        const heroActions = document.querySelector('.hero .hero-actions');
+        if (!heroActions || heroActions.querySelector('.hero-strategy-links')) return;
+
+        const lang = getCurrentLang();
+        const linkPrefix = getLanguageLinkPrefix();
+        const copy = {
+            en: { markets: 'Global Markets', news: 'News' },
+            zh: { markets: '全球市场', news: '新闻' },
+            ru: { markets: 'Глобальные рынки', news: 'Новости' }
+        }[lang] || { markets: 'Global Markets', news: 'News' };
+
+        const links = document.createElement('p');
+        links.className = 'hero-strategy-links';
+        links.innerHTML = `
+            <a href="${linkPrefix}markets.html">${copy.markets}</a>
+            <span>/</span>
+            <a href="${linkPrefix}news.html">${copy.news}</a>
+        `;
+        heroActions.insertAdjacentElement('afterend', links);
+    };
+
+    const installStrategicPageLayout = () => {
+        const page = getCurrentPageKey();
+        if (!strategyPages.has(page)) return;
+        const section = document.querySelector('section.services');
+        if (!section) return;
+        const lang = getCurrentLang();
+        const copyMap = {
+            en: {
+                markets: {
+                    title: 'Global Markets',
+                    intro: 'We align capital allocation and operating execution across strategic corridors to improve resilience and long-term returns.',
+                    cards: [
+                        ['Europe', 'Focus on industrial upgrading, logistics gateways, and disciplined transaction execution in mature legal environments.'],
+                        ['Gulf', 'Prioritize energy transition, infrastructure-linked assets, and cross-border partnership structuring.'],
+                        ['Asia-Pacific', 'Support growth-stage and strategic repositioning opportunities through integrated investment-operating frameworks.']
+                    ]
+                },
+                news: {
+                    title: 'News',
+                    intro: 'Track key updates across investment transactions, new partners, project launches, and market expansion milestones.',
+                    lead: {
+                        date: '2026-03-02',
+                        title: 'AST Invest launches News Center update framework',
+                        summary: 'We have completed the first structure upgrade of the News page to provide recurring updates on investment transactions, partnership announcements, project releases, and new market expansion. Detailed items will be added continuously.',
+                        status: 'Published'
+                    }
+                }
+            },
+            zh: {
+                markets: {
+                    title: '全球市场',
+                    intro: '围绕关键区域通道进行资本配置与运营协同，提升资产韧性与长期回报质量。',
+                    cards: [
+                        ['欧洲市场', '重点布局产业升级、物流通道与成熟法域下的结构化交易执行。'],
+                        ['海湾市场', '聚焦能源转型、基础设施相关资产及跨境合作架构设计。'],
+                        ['亚太市场', '围绕成长型与战略重组机会，提供投资与运营一体化支持。']
+                    ]
+                },
+                news: {
+                    title: '新闻',
+                    intro: '用于发布公司关键动态，包括投资交易、新合作伙伴、项目发布与新市场拓展等信息。',
+                    lead: {
+                        date: '2026-03-02',
+                        title: 'AST Invest 新闻中心发布机制上线',
+                        summary: '新闻页面已完成首版排版升级，将围绕投资交易、新合作伙伴、项目发布与新市场拓展持续更新。后续将按项目进展逐条补充具体内容。',
+                        status: '已发布'
+                    }
+                }
+            },
+            ru: {
+                markets: {
+                    title: 'Глобальные рынки',
+                    intro: 'Мы синхронизируем аллокацию капитала и операционное исполнение по ключевым региональным коридорам для устойчивого роста стоимости.',
+                    cards: [
+                        ['Европа', 'Фокус на промышленной трансформации, логистических узлах и дисциплинированном исполнении сделок в зрелых юрисдикциях.'],
+                        ['Персидский залив', 'Приоритет на активах энергетического перехода, инфраструктурных проектах и структурировании трансграничных партнерств.'],
+                        ['АТР', 'Поддержка сделок роста и стратегической трансформации через интегрированную инвестиционно-операционную модель.']
+                    ]
+                },
+                news: {
+                    title: 'Новости',
+                    intro: 'Здесь публикуются ключевые обновления: инвестиционные сделки, новые партнеры, запуски проектов и расширение на новые рынки.',
+                    lead: {
+                        date: '2026-03-02',
+                        title: 'AST Invest запускает обновленный формат News Center',
+                        summary: 'Страница новостей получила новую структуру и теперь будет регулярно обновляться по четырем направлениям: инвестиционные сделки, новые партнеры, запуск проектов и расширение на новые рынки.',
+                        status: 'Опубликовано'
+                    }
+                }
+            }
+        };
+        const pack = copyMap[lang] || copyMap.en;
+        const content = page === 'markets.html' ? pack.markets : pack.news;
+        if (page === 'news.html') {
+            section.innerHTML = `
+                <div class="section-header">
+                    <h2>${content.title}</h2>
+                    <p>${content.intro}</p>
+                </div>
+                <article class="news-lead-card">
+                    <p class="news-meta">
+                        <span>${content.lead.date}</span>
+                        <span class="news-status">${content.lead.status}</span>
+                    </p>
+                    <h3>${content.lead.title}</h3>
+                    <p>${content.lead.summary}</p>
+                </article>
+                <div class="news-empty-note">
+                    ${lang === 'zh'
+                        ? '后续将持续新增新闻条目。'
+                        : lang === 'ru'
+                            ? 'Новые новости будут добавляться по мере публикации.'
+                            : 'Additional news entries will be added continuously.'}
+                </div>
+                <p style="margin-top: 2rem;"><a href="contact.html" class="btn btn-secondary">${lang === 'zh' ? '联系团队' : lang === 'ru' ? 'Связаться с командой' : 'Contact Our Team'}</a></p>
+            `;
+            return;
+        }
+
+        section.innerHTML = `
+            <div class="section-header">
+                <h2>${content.title}</h2>
+                <p>${content.intro}</p>
+            </div>
+            <div class="service-grid">
+                ${content.cards.map(([title, text]) => `
+                    <article class="service-card">
+                        <h3>${title}</h3>
+                        <p>${text}</p>
+                    </article>
+                `).join('')}
+            </div>
+            <p style="margin-top: 2rem;"><a href="contact.html" class="btn btn-secondary">${lang === 'zh' ? '联系团队' : lang === 'ru' ? 'Связаться с командой' : 'Contact Our Team'}</a></p>
+        `;
+    };
+
+    const installHomeRoadmap = () => {
+        const page = getCurrentPageKey();
+        if (page !== 'index.html' || !document.body.classList.contains('page-home')) return;
+        if (document.querySelector('.strategy-home-roadmap')) return;
+        const servicesSection = document.querySelector('section.services');
+        if (!servicesSection) return;
+        const lang = getCurrentLang();
+        const copyMap = {
+            en: {
+                title: 'Strategic Growth Priorities',
+                intro: 'A focused roadmap to deepen cross-border execution quality while preserving downside protection.',
+                cta: 'Explore Global Strategy Pages',
+                cards: [
+                    ['Portfolio Quality', 'Prioritize assets with clear cash-flow visibility, resilient demand, and measurable operational upside.'],
+                    ['Execution Platform', 'Strengthen transaction-to-operations integration to improve speed, transparency, and governance consistency.'],
+                    ['Capital Discipline', 'Maintain strict risk-return thresholds and dynamic allocation controls across market cycles.']
+                ]
+            },
+            zh: {
+                title: '战略增长重点',
+                intro: '围绕跨境执行质量与下行风险防护，持续推进可落地的增长路线。',
+                cta: '查看全球战略页面',
+                cards: [
+                    ['资产质量提升', '优先配置现金流可见、需求稳健且具备运营增值空间的资产。'],
+                    ['执行平台强化', '打通交易与运营协同链路，提升交付速度、透明度与治理一致性。'],
+                    ['资本纪律管理', '在不同市场周期下，坚持风险收益阈值与动态配置机制。']
+                ]
+            },
+            ru: {
+                title: 'Стратегические приоритеты роста',
+                intro: 'Концентрированная дорожная карта для усиления трансграничного исполнения при сохранении защиты от снижения.',
+                cta: 'Перейти к стратегическим страницам',
+                cards: [
+                    ['Качество портфеля', 'Приоритет активам с прогнозируемым денежным потоком, устойчивым спросом и операционным потенциалом.'],
+                    ['Платформа исполнения', 'Усиление связки между сделкой и операционной фазой для скорости, прозрачности и единых стандартов контроля.'],
+                    ['Капитальная дисциплина', 'Сохранение жестких риск-доходных критериев и гибкой аллокации в разных фазах рынка.']
+                ]
+            }
+        };
+        const copy = copyMap[lang] || copyMap.en;
+        const linkPrefix = getLanguageLinkPrefix();
+        const section = document.createElement('section');
+        section.className = 'services strategy-home-roadmap';
+        section.id = 'home-roadmap';
+        section.innerHTML = `
+            <div class="section-header">
+                <h2>${copy.title}</h2>
+                <p>${copy.intro}</p>
+            </div>
+            <div class="service-grid">
+                ${copy.cards.map(([title, text]) => `
+                    <article class="service-card">
+                        <h3>${title}</h3>
+                        <p>${text}</p>
+                    </article>
+                `).join('')}
+            </div>
+            <p class="strategy-roadmap-actions">
+                <a href="${linkPrefix}markets.html" class="btn btn-secondary">${copy.cta}</a>
+            </p>
+        `;
+        servicesSection.insertAdjacentElement('afterend', section);
+    };
+
+    const installAboutRefresh = () => {
+        const page = getCurrentPageKey();
+        if (page !== 'about.html' || !document.body.classList.contains('page-about')) return;
+        const aboutText = document.querySelector('.about .about-text');
+        const aboutStats = document.querySelector('.about .about-stats');
+        if (!aboutText || !aboutStats) return;
+        const lang = getCurrentLang();
+        const map = {
+            en: {
+                title: 'About AST Invest',
+                paragraphs: [
+                    'AST Invest is a global asset management company with a clear mission: help more people achieve financial well-being. We support millions of investors in building savings and wealth that can last through a lifetime.',
+                    'Our journey began in 2012 with a trading company established in Kazakhstan. Initial operations focused on meat products, then gradually expanded into grain and broader supply-chain management, with the core task of optimizing value at every stage.',
+                    'By 2026, the company is entering a new stage of development, participating in investment and management across Kazakhstan and CIS market segments. We are building a practical bridge between regional growth companies and the Hong Kong capital market, including IPO pathways.',
+                    'Our long-term philosophy combines sustainable development, disciplined investment stewardship, and social responsibility. We continue to reinvest in business and people, work closely with management teams on governance and strategy, and support community infrastructure together with partners.',
+                    'AST Invest operates globally by leveraging the strategic advantages of Kazakhstan and Hong Kong. Our team is built on professional capability and sector experience, and we believe outstanding talent is the core driver of durable growth.'
+                ],
+                stats: [
+                    ['2012', 'Foundation established in Kazakhstan'],
+                    ['2026', 'New-stage investment and management expansion'],
+                    ['Global', 'Kazakhstan-Hong Kong strategic linkage']
+                ]
+            },
+            zh: {
+                title: '关于 AST Invest',
+                paragraphs: [
+                    '我们是一家全球资产管理公司，使命是帮助越来越多的人实现长期财富增长。我们帮助数百万人进行投资，建立能够伴随其一生的储蓄与财富。',
+                    '公司的发展始于2012年，在哈萨克斯坦成立贸易公司。业务最初聚焦肉类产品，随后逐步拓展至粮食（谷物）贸易，核心任务始终是对供应链各阶段进行管理与优化。',
+                    '到2026年，公司进入新的发展阶段，开始参与哈萨克斯坦及独联体市场各细分领域的投资与管理。围绕全链运营、战略与企业交易、风险合规法证、税务与商务咨询四大模块，我们在城市综合体开发、矿产供应链配置、港口资产重组等场景中持续沉淀可复制的执行体系，并推动区域成长型企业与香港资本市场的连接，服务企业资本化发展。',
+                    '我们的长期理念包括可持续发展、投资管理与社会责任。在服务落地中，我们将投前筛选、交易执行与投后优化贯通为连续闭环，持续对业务与团队进行再投资，并与企业管理层围绕治理效率、风险边界和公司战略开展深度协作。',
+                    'AST Invest 依托哈萨克斯坦与香港的战略优势开展全球布局，通过跨区域资源协同与专业团队交付，持续提升项目执行确定性与长期价值创造能力。我们相信，具备行业经验与复合能力的人才，是公司长期发展的核心驱动力。'
+                ],
+                stats: [
+                    ['2012', '哈萨克斯坦业务起点'],
+                    ['2026', '进入投资与管理新阶段'],
+                    ['全球布局', '连接哈萨克斯坦与香港']
+                ]
+            },
+            ru: {
+                title: 'О компании AST Invest',
+                paragraphs: [
+                    'AST Invest — глобальная компания по управлению активами с миссией помогать все большему числу людей достигать финансового благополучия. Мы помогаем миллионам инвесторов формировать сбережения и капитал на долгий срок.',
+                    'Развитие компании началось в 2012 году с торгового бизнеса в Казахстане. Изначально деятельность была сосредоточена на мясной продукции, затем расширилась в направлении зерновой торговли и управления цепочками поставок.',
+                    'К 2026 году компания выходит на новый этап, участвуя в инвестициях и управлении в различных сегментах рынков Казахстана и стран СНГ. Мы последовательно формируем мост между региональными растущими компаниями и рынком капитала Гонконга, включая IPO-траектории.',
+                    'Наша долгосрочная философия опирается на устойчивое развитие, дисциплинированное инвестиционное управление и социальную ответственность. Мы реинвестируем в бизнес и команду, работаем с менеджментом компаний над эффективностью управления и стратегией, а также поддерживаем общественные инфраструктурные инициативы вместе с партнерами.',
+                    'AST Invest действует глобально, используя стратегические преимущества Казахстана и Гонконга. Наша управленческая команда объединяет профессиональные компетенции и отраслевой опыт, а ключевым драйвером долгосрочного роста мы считаем сильных специалистов.'
+                ],
+                stats: [
+                    ['2012', 'Старт бизнеса в Казахстане'],
+                    ['2026', 'Новый этап инвестиций и управления'],
+                    ['Global', 'Стратегическая связка Казахстан-Гонконг']
+                ]
+            }
+        };
+        const content = map[lang] || map.en;
+        aboutText.innerHTML = `
+            <h2>${content.title}</h2>
+            ${content.paragraphs.map((text) => `<p>${text}</p>`).join('')}
+        `;
+        aboutStats.innerHTML = content.stats.map(([num, label]) => `
+            <div class="stat-item">
+                <span class="stat-number">${num}</span>
+                <span class="stat-label">${label}</span>
+            </div>
+        `).join('');
     };
 
     const installLegalFooterLinks = () => {
@@ -1228,7 +1606,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     ensurePageSectionIds();
+    installStrategicNavLinks();
+    installHomeStrategicQuickLinks();
     ensureLegalLangSwitch();
+    ensureStrategyLangSwitch();
+    installStrategicPageLayout();
+    installHomeRoadmap();
+    installAboutRefresh();
     installLegalPageLayout();
     installServiceFaqs();
     installStructuredData();

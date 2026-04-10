@@ -72,7 +72,8 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2rem 5%;
+    padding: 1.2rem 5%;
+    min-height: 86px;
     background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(20px);
     position: fixed;
@@ -100,7 +101,8 @@ header::after {
 header.is-scrolled {
     background-color: rgba(255, 255, 255, 0.95);
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-    padding: 1rem 5%;
+    padding: 0.85rem 5%;
+    min-height: 74px;
 }
 
 .logo-container {
@@ -113,10 +115,11 @@ header.is-scrolled {
     align-items: center;
     gap: 15px; /* Space between logo and text */
     text-decoration: none;
+    line-height: 1;
 }
 
 .logo-container img {
-    height: 65px; /* Slightly reduced to balance with text */
+    height: clamp(50px, 3.6vw, 60px);
     width: auto;
     filter: brightness(0.9);
 }
@@ -124,7 +127,7 @@ header.is-scrolled {
 /* Single line full brand name */
 .brand-full {
     font-family: 'Playfair Display', serif;
-    font-size: 1.35rem; /* Slightly larger */
+    font-size: clamp(1.08rem, 1.35vw, 1.24rem);
     font-weight: 700;
     
     /* Gradient Text for Premium Look */
@@ -143,8 +146,9 @@ header.is-scrolled {
 
 nav ul {
     display: flex;
-    gap: 3rem;
+    gap: clamp(0.85rem, 1.8vw, 1.6rem);
     align-items: center;
+    min-height: 46px;
 }
 
 nav ul > li {
@@ -152,16 +156,21 @@ nav ul > li {
 }
 
 nav a {
-    font-size: 0.9rem;
+    font-size: 0.82rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.7px;
     position: relative;
     color: var(--primary-color);
-    padding: 10px 22px; /* Increased padding for the pill shape */
+    padding: 8px 14px;
     border-radius: 50px;
     transition: all 0.3s ease;
     isolation: isolate; /* Create new stacking context */
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
 }
 
 /* Glassmorphism Background Layer */
@@ -206,9 +215,9 @@ nav a:hover::before {
     transform: scale(1);
     /* Enhance shadow on hover */
     box-shadow: 
-        0 8px 25px rgba(0, 140, 69, 0.1), /* Hint of brand color in shadow */
+        0 8px 25px rgba(205, 33, 42, 0.12), /* Logo red hint in shadow */
         inset 0 0 20px rgba(255, 255, 255, 0.5);
-    border-color: rgba(255, 255, 255, 0.9);
+    border-color: rgba(205, 33, 42, 0.5);
 }
 
 .nav-submenu {
@@ -329,10 +338,29 @@ nav a:hover::before {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 5px 10px;
+    padding: 6px 10px;
+    font-size: 0.82rem;
+    letter-spacing: 0.3px;
     border: 1px solid rgba(0,0,0,0.1);
     border-radius: 4px;
     transition: var(--transition);
+}
+
+@media (max-width: 1360px) {
+    nav ul {
+        gap: clamp(0.55rem, 1.2vw, 1rem);
+    }
+
+    nav a {
+        font-size: 0.79rem;
+        letter-spacing: 0.5px;
+        padding: 7px 11px;
+    }
+
+    .lang-current {
+        font-size: 0.78rem;
+        padding: 5px 9px;
+    }
 }
 
 .lang-current:hover {
@@ -554,6 +582,27 @@ body.page-contact {
     align-items: center;
 }
 
+.hero-strategy-links {
+    margin: 1rem 0 0;
+    font-size: 0.86rem;
+    letter-spacing: 0.3px;
+    color: rgba(26, 43, 75, 0.72);
+}
+
+.hero-strategy-links a {
+    color: rgba(26, 43, 75, 0.86);
+    font-weight: 600;
+}
+
+.hero-strategy-links a:hover {
+    color: var(--secondary-color);
+}
+
+.hero-strategy-links span {
+    margin: 0 0.45rem;
+    color: rgba(26, 43, 75, 0.42);
+}
+
 .hero-actions.hero-actions-uniform .btn {
     width: 300px;
     min-width: 300px;
@@ -746,6 +795,98 @@ body.page-contact {
 .services {
     padding: 4rem 5%;
     background-color: transparent;
+}
+
+.strategy-roadmap-actions {
+    margin-top: 2rem;
+}
+
+body.page-strategy .services {
+    padding-top: 3.4rem;
+}
+
+body.page-strategy .services .section-header {
+    max-width: 860px;
+    margin-bottom: 2.6rem;
+}
+
+body.page-strategy .services .section-header p {
+    color: rgba(30, 41, 59, 0.86);
+}
+
+body.page-strategy .services .service-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.3rem;
+}
+
+body.page-strategy .services .service-card {
+    padding: 2.2rem 1.45rem;
+    border: 1px solid rgba(255, 255, 255, 0.56);
+    border-top-color: rgba(255, 255, 255, 0.66);
+    border-radius: 14px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.58), rgba(246, 250, 255, 0.35));
+    backdrop-filter: blur(10px) saturate(128%);
+    -webkit-backdrop-filter: blur(10px) saturate(128%);
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.14);
+}
+
+body.page-strategy .services .service-card h3 {
+    font-size: 1.22rem;
+    margin-bottom: 0.78rem;
+}
+
+body.page-strategy .services .service-card p {
+    font-size: 0.96rem;
+    line-height: 1.72;
+}
+
+body.page-strategy .services .service-card:hover {
+    transform: translateY(-7px);
+    border-top-color: rgba(205, 33, 42, 0.56);
+    box-shadow: 0 18px 36px rgba(15, 23, 42, 0.18);
+}
+
+.news-lead-card {
+    padding: 1.45rem 1.35rem;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.58);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.6), rgba(246, 250, 255, 0.4));
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+    backdrop-filter: blur(10px) saturate(125%);
+    -webkit-backdrop-filter: blur(10px) saturate(125%);
+}
+
+.news-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.8rem;
+    color: rgba(30, 41, 59, 0.68);
+}
+
+.news-status {
+    padding: 0.18rem 0.55rem;
+    border-radius: 999px;
+    background: rgba(0, 140, 69, 0.12);
+    color: rgba(0, 140, 69, 0.9);
+    font-weight: 700;
+    letter-spacing: 0.25px;
+}
+
+.news-lead-card h3 {
+    margin-bottom: 0.62rem;
+    font-size: 1.28rem;
+}
+
+.news-lead-card p {
+    margin-bottom: 0;
+}
+
+.news-empty-note {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: rgba(30, 41, 59, 0.74);
 }
 
 /* Tighten spacing between services and network map sections. */
