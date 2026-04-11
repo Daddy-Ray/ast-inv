@@ -387,10 +387,15 @@ document.addEventListener('DOMContentLoaded', () => {
         'service-full-chain.html',
         'service-strategy-deals.html',
         'service-risk-compliance-forensics.html',
-        'service-tax-business-consulting.html'
+        'service-tax-business-consulting.html',
+        'service-investment-management.html',
+        'service-investment-funds.html',
+        'service-private-wealth-management.html',
+        'service-global-markets-access.html',
+        'service-capital-raising.html',
+        'service-investment-analytics.html'
     ]);
     const strategyPages = new Set([
-        'markets.html',
         'news.html'
     ]);
     const legalPages = new Set([
@@ -687,10 +692,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const linkPrefix = getLanguageLinkPrefix();
 
         const copy = {
-            en: { markets: 'Global Markets', news: 'News' },
-            zh: { markets: '全球市场', news: '新闻' },
-            ru: { markets: 'Глобальные рынки', news: 'Новости' }
-        }[lang] || { markets: 'Global Markets', news: 'News' };
+            en: { news: 'News' },
+            zh: { news: '新闻' },
+            ru: { news: 'Новости' }
+        }[lang] || { news: 'News' };
 
         const insertLink = (href, label) => {
             const hasLink = Array.from(navList.querySelectorAll('a[href]')).some((a) => {
@@ -716,7 +721,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        insertLink('markets.html', copy.markets);
         insertLink('news.html', copy.news);
 
         const footerCols = Array.from(document.querySelectorAll('footer .footer-col'));
@@ -739,32 +743,7 @@ document.addEventListener('DOMContentLoaded', () => {
             li.appendChild(a);
             quickLinks.appendChild(li);
         };
-        appendQuickLink('markets.html', copy.markets);
         appendQuickLink('news.html', copy.news);
-    };
-
-    const installHomeStrategicQuickLinks = () => {
-        const page = getCurrentPageKey();
-        if (page !== 'index.html' || !document.body.classList.contains('page-home')) return;
-        const heroActions = document.querySelector('.hero .hero-actions');
-        if (!heroActions || heroActions.querySelector('.hero-strategy-links')) return;
-
-        const lang = getCurrentLang();
-        const linkPrefix = getLanguageLinkPrefix();
-        const copy = {
-            en: { markets: 'Global Markets', news: 'News' },
-            zh: { markets: '全球市场', news: '新闻' },
-            ru: { markets: 'Глобальные рынки', news: 'Новости' }
-        }[lang] || { markets: 'Global Markets', news: 'News' };
-
-        const links = document.createElement('p');
-        links.className = 'hero-strategy-links';
-        links.innerHTML = `
-            <a href="${linkPrefix}markets.html">${copy.markets}</a>
-            <span>/</span>
-            <a href="${linkPrefix}news.html">${copy.news}</a>
-        `;
-        heroActions.insertAdjacentElement('afterend', links);
     };
 
     const installStrategicPageLayout = () => {
@@ -839,7 +818,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
         const pack = copyMap[lang] || copyMap.en;
-        const content = page === 'markets.html' ? pack.markets : pack.news;
+        const content = pack.news;
         if (page === 'news.html') {
             section.innerHTML = `
                 <div class="section-header">
@@ -894,7 +873,6 @@ document.addEventListener('DOMContentLoaded', () => {
             en: {
                 title: 'Strategic Growth Priorities',
                 intro: 'A focused roadmap to deepen cross-border execution quality while preserving downside protection.',
-                cta: 'Explore Global Strategy Pages',
                 cards: [
                     ['Portfolio Quality', 'Prioritize assets with clear cash-flow visibility, resilient demand, and measurable operational upside.'],
                     ['Execution Platform', 'Strengthen transaction-to-operations integration to improve speed, transparency, and governance consistency.'],
@@ -904,7 +882,6 @@ document.addEventListener('DOMContentLoaded', () => {
             zh: {
                 title: '战略增长重点',
                 intro: '围绕跨境执行质量与下行风险防护，持续推进可落地的增长路线。',
-                cta: '查看全球战略页面',
                 cards: [
                     ['资产质量提升', '优先配置现金流可见、需求稳健且具备运营增值空间的资产。'],
                     ['执行平台强化', '打通交易与运营协同链路，提升交付速度、透明度与治理一致性。'],
@@ -914,7 +891,6 @@ document.addEventListener('DOMContentLoaded', () => {
             ru: {
                 title: 'Стратегические приоритеты роста',
                 intro: 'Концентрированная дорожная карта для усиления трансграничного исполнения при сохранении защиты от снижения.',
-                cta: 'Перейти к стратегическим страницам',
                 cards: [
                     ['Качество портфеля', 'Приоритет активам с прогнозируемым денежным потоком, устойчивым спросом и операционным потенциалом.'],
                     ['Платформа исполнения', 'Усиление связки между сделкой и операционной фазой для скорости, прозрачности и единых стандартов контроля.'],
@@ -923,7 +899,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
         const copy = copyMap[lang] || copyMap.en;
-        const linkPrefix = getLanguageLinkPrefix();
         const section = document.createElement('section');
         section.className = 'services strategy-home-roadmap';
         section.id = 'home-roadmap';
@@ -940,9 +915,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     </article>
                 `).join('')}
             </div>
-            <p class="strategy-roadmap-actions">
-                <a href="${linkPrefix}markets.html" class="btn btn-secondary">${copy.cta}</a>
-            </p>
         `;
         servicesSection.insertAdjacentElement('afterend', section);
     };
@@ -1187,10 +1159,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 ],
                 'services.html': [
                     { id: 'services', label: '业务范围' },
-                    { page: 'service-full-chain.html', path: 'service-full-chain.html', label: '全链运营服务', flyout: true },
-                    { page: 'service-strategy-deals.html', path: 'service-strategy-deals.html', label: '战略与企业交易', flyout: true },
-                    { page: 'service-risk-compliance-forensics.html', path: 'service-risk-compliance-forensics.html', label: '风险、合规与法证', flyout: true },
-                    { page: 'service-tax-business-consulting.html', path: 'service-tax-business-consulting.html', label: '税务与商务咨询', flyout: true }
+                    { page: 'service-global-markets-access.html', path: 'service-global-markets-access.html', label: '全球市场通道', flyout: true },
+                    { page: 'service-capital-raising.html', path: 'service-capital-raising.html', label: '资本募集', flyout: true },
+                    { page: 'service-investment-analytics.html', path: 'service-investment-analytics.html', label: '投资分析', flyout: true },
+                    { page: 'service-investment-management.html', path: 'service-investment-management.html', label: '投资管理', flyout: true },
+                    { page: 'service-investment-funds.html', path: 'service-investment-funds.html', label: '投资基金', flyout: true },
+                    { page: 'service-private-wealth-management.html', path: 'service-private-wealth-management.html', label: '私人财富管理', flyout: true }
                 ],
                 'contact.html': [
                     { id: 'contact-overview', label: '联系信息' }
@@ -1205,10 +1179,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 ],
                 'services.html': [
                     { id: 'services', label: 'Business Scope' },
-                    { page: 'service-full-chain.html', path: 'service-full-chain.html', label: 'End-to-End Operations', flyout: true },
-                    { page: 'service-strategy-deals.html', path: 'service-strategy-deals.html', label: 'Strategy and Corporate Deals', flyout: true },
-                    { page: 'service-risk-compliance-forensics.html', path: 'service-risk-compliance-forensics.html', label: 'Risk, Compliance and Forensics', flyout: true },
-                    { page: 'service-tax-business-consulting.html', path: 'service-tax-business-consulting.html', label: 'Tax and Business Advisory', flyout: true }
+                    { page: 'service-global-markets-access.html', path: 'service-global-markets-access.html', label: 'Global Markets Access', flyout: true },
+                    { page: 'service-capital-raising.html', path: 'service-capital-raising.html', label: 'Capital Raising', flyout: true },
+                    { page: 'service-investment-analytics.html', path: 'service-investment-analytics.html', label: 'Investment Analytics', flyout: true },
+                    { page: 'service-investment-management.html', path: 'service-investment-management.html', label: 'Investment Management', flyout: true },
+                    { page: 'service-investment-funds.html', path: 'service-investment-funds.html', label: 'Investment Funds', flyout: true },
+                    { page: 'service-private-wealth-management.html', path: 'service-private-wealth-management.html', label: 'Private Wealth Management', flyout: true }
                 ],
                 'contact.html': [
                     { id: 'contact-overview', label: 'Contact Information' }
@@ -1223,10 +1199,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 ],
                 'services.html': [
                     { id: 'services', label: 'Сферы деятельности' },
-                    { page: 'service-full-chain.html', path: 'service-full-chain.html', label: 'Комплексное сопровождение', flyout: true },
-                    { page: 'service-strategy-deals.html', path: 'service-strategy-deals.html', label: 'Стратегия и сделки', flyout: true },
-                    { page: 'service-risk-compliance-forensics.html', path: 'service-risk-compliance-forensics.html', label: 'Риски, комплаенс и форензика', flyout: true },
-                    { page: 'service-tax-business-consulting.html', path: 'service-tax-business-consulting.html', label: 'Налоговый и бизнес-консалтинг', flyout: true }
+                    { page: 'service-global-markets-access.html', path: 'service-global-markets-access.html', label: 'Глобальный доступ к рынкам', flyout: true },
+                    { page: 'service-capital-raising.html', path: 'service-capital-raising.html', label: 'Привлечение капитала', flyout: true },
+                    { page: 'service-investment-analytics.html', path: 'service-investment-analytics.html', label: 'Инвестиционная аналитика', flyout: true },
+                    { page: 'service-investment-management.html', path: 'service-investment-management.html', label: 'Управление инвестициями', flyout: true },
+                    { page: 'service-investment-funds.html', path: 'service-investment-funds.html', label: 'Инвестиционные фонды', flyout: true },
+                    { page: 'service-private-wealth-management.html', path: 'service-private-wealth-management.html', label: 'Private Wealth Management', flyout: true }
                 ],
                 'contact.html': [
                     { id: 'contact-overview', label: 'Контактная информация' }
@@ -1607,7 +1585,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     ensurePageSectionIds();
     installStrategicNavLinks();
-    installHomeStrategicQuickLinks();
     ensureLegalLangSwitch();
     ensureStrategyLangSwitch();
     installStrategicPageLayout();

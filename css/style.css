@@ -431,9 +431,16 @@ html[lang="ru"] body.page-home .hero {
     padding-top: clamp(7.5rem, 9vw, 9rem);
 }
 
+/* Tone down oversized EN/RU home title */
+html[lang="en"] body.page-home .hero h1,
+html[lang="ru"] body.page-home .hero h1 {
+    font-size: clamp(2.45rem, 3.9vw, 3.4rem);
+    line-height: 1.16;
+}
+
 /* One background image per page */
 body.page-home {
-    background-image: linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)), url("../assets/backgrounds/home-business.jpg");
+    background-image: linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)), url("../assets/backgrounds/hakodate-night.jpg");
 }
 
 body.page-about {
@@ -442,6 +449,14 @@ body.page-about {
 
 body.page-services {
     background-image: linear-gradient(rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.78)), url("../assets/backgrounds/services-financial-street.jpg");
+}
+
+body.page-services.page-services-overview {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.74)), url("../assets/backgrounds/victoria-harbor-night.jpg");
+}
+
+body.page-services:not(.page-services-overview):not(.page-strategy) {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.74)), url("../assets/backgrounds/victoria-harbor-night.jpg");
 }
 
 body.page-services.page-service-full-chain {
@@ -1084,6 +1099,114 @@ body.page-strategy .services .service-card:hover {
     font-weight: 600;
 }
 
+/* Glass hover interaction for services overview cards */
+body.page-services #services .service-card {
+    position: relative;
+    overflow: hidden;
+    padding: 2.35rem 1.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.52);
+    border-top-color: rgba(255, 255, 255, 0.6);
+    border-radius: 16px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.4), rgba(241, 246, 255, 0.26));
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(10px) saturate(125%);
+    -webkit-backdrop-filter: blur(10px) saturate(125%);
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease, opacity 0.3s ease, filter 0.3s ease;
+}
+
+body.page-services #services .service-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.02) 58%);
+    pointer-events: none;
+    opacity: 0.75;
+    transition: opacity 0.35s ease;
+}
+
+body.page-services #services .service-card::after {
+    content: "";
+    position: absolute;
+    top: -30%;
+    left: -55%;
+    width: 45%;
+    height: 165%;
+    pointer-events: none;
+    background: linear-gradient(
+        110deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.05) 35%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.05) 65%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: translate3d(-155%, 0, 0) rotate(14deg);
+    opacity: 0;
+    z-index: 0;
+}
+
+body.page-services #services .service-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+body.page-services #services .service-grid:hover .service-card {
+    opacity: 0.58;
+    filter: saturate(0.74) blur(0.4px);
+}
+
+body.page-services #services .service-grid:hover .service-card:hover {
+    opacity: 1;
+    filter: none;
+}
+
+body.page-services #services .service-card:hover {
+    transform: translateY(-12px) scale(1.018);
+    border-color: rgba(205, 33, 42, 0.72);
+    box-shadow: 0 24px 50px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(205, 33, 42, 0.35) inset, 0 0 28px rgba(205, 33, 42, 0.26);
+}
+
+body.page-services #services .service-card:hover::before {
+    opacity: 1;
+}
+
+body.page-services #services .service-card:hover::after {
+    opacity: 0.72;
+    animation: service-card-sheen 1.25s cubic-bezier(0.22, 1, 0.36, 1) 1 both;
+}
+
+body.page-services #services .service-card:hover .service-icon {
+    color: var(--accent-color);
+}
+
+body.page-services #services .service-points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.52rem 0.85rem;
+}
+
+body.page-services #services .service-points li {
+    position: relative;
+    padding-left: 0.75rem;
+    color: var(--text-light);
+    font-size: 0.96rem;
+    line-height: 1.5;
+}
+
+body.page-services #services .service-points li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 0.28rem;
+    height: 0.28rem;
+    border-radius: 50%;
+    background: rgba(205, 33, 42, 0.7);
+}
+
 .service-case-block {
     margin-top: 2.6rem;
     padding: 2rem 1.6rem 2.2rem;
@@ -1642,6 +1765,37 @@ body.page-strategy .services .service-card:hover {
 @media (max-width: 640px) {
     .service-grid-four {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (hover: none) {
+    body.page-services #services .service-grid:hover .service-card,
+    body.page-services #services .service-grid:hover .service-card:hover {
+        opacity: 1;
+        filter: none;
+    }
+}
+
+@media (max-width: 768px) {
+    body.page-services #services .service-points {
+        grid-template-columns: 1fr;
+    }
+}
+
+@keyframes service-card-sheen {
+    0% {
+        transform: translate3d(-155%, 0, 0) rotate(14deg);
+        opacity: 0;
+    }
+    15% {
+        opacity: 0.5;
+    }
+    75% {
+        opacity: 0.42;
+    }
+    100% {
+        transform: translate3d(260%, 0, 0) rotate(14deg);
+        opacity: 0;
     }
 }
 
