@@ -386,7 +386,7 @@
             if (!infoCard || !activeInfo) return;
             var point = map.latLngToContainerPoint(activeInfo.latlng);
             var size = map.getSize();
-            var cardWidth = Math.min(300, Math.max(220, size.x - 20));
+            var cardWidth = Math.min(360, Math.max(240, size.x - 10));
             infoCard.style.width = cardWidth + "px";
             var mediaHtml = activeInfo.image
                 ? '<div class="finance-map-info-media"><img src="' + activeInfo.image + '" alt="' + activeInfo.title + '"></div>'
@@ -398,7 +398,14 @@
             infoCard.classList.add("active");
 
             var cardHeight = infoCard.offsetHeight || 96;
-            var left = clamp(point.x, cardWidth / 2 + 10, size.x - cardWidth / 2 - 10);
+            var shellRect = mapShell.getBoundingClientRect();
+            var viewportX = shellRect.left + point.x;
+            var clampedViewportX = clamp(
+                viewportX,
+                cardWidth / 2 + 10,
+                window.innerWidth - cardWidth / 2 - 10
+            );
+            var left = clampedViewportX - shellRect.left;
             var top = point.y - 14;
             if (top - cardHeight < 8) {
                 top = cardHeight + 14;

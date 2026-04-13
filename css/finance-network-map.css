@@ -31,7 +31,7 @@
     max-width: 680px;
     margin-left: auto;
     border-radius: 16px;
-    overflow: hidden;
+    overflow: visible;
     border: 1px solid rgba(28, 63, 96, 0.2);
     box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
     background: linear-gradient(135deg, rgba(246, 250, 255, 0.95), rgba(240, 247, 252, 0.9));
@@ -41,6 +41,8 @@
     height: 300px;
     width: 100%;
     background: #eef3f8;
+    border-radius: 16px;
+    overflow: hidden;
 }
 
 .finance-map-vignette {
@@ -50,6 +52,7 @@
     background:
         radial-gradient(circle at center, rgba(245, 250, 255, 0) 55%, rgba(214, 225, 237, 0.35) 100%),
         linear-gradient(180deg, rgba(243, 248, 254, 0.15), rgba(226, 236, 246, 0.2));
+    border-radius: 16px;
 }
 
 .finance-map-info {
@@ -154,8 +157,9 @@
     margin: 0;
     color: rgba(42, 61, 83, 0.88);
     text-shadow: none;
-    font-size: 0.9rem;
-    line-height: 1.6;
+    font-size: 0.78rem;
+    line-height: 1.45;
+    word-break: break-word;
 }
 
 .finance-map-info-media {
@@ -313,7 +317,6 @@
 
     .finance-map-info {
         width: min(280px, calc(100% - 20px));
-        border-radius: 0;
         border-radius: 10px;
     }
 
