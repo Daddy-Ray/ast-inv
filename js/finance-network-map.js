@@ -18,7 +18,8 @@
         showLines: true,
         lineColor: "#008C45",
         nodeColor: "#1C3F60",
-        pulseEffect: true
+        pulseEffect: true,
+        tdtToken: "d3a2bf7153bdde04a5e4c324a5a0732a"
     };
 
     var defaultCopy = {
@@ -218,10 +219,13 @@
         var now = typeof ts === "number" ? ts : performance.now();
         var map = this.map;
         var self = this;
+        // Keep canvas anchor aligned with current viewport origin to avoid drift
+        // after repeated zoom/pan operations.
+        L.DomUtil.setPosition(this.canvas, map.containerPointToLayerPoint([0, 0]));
 
         this.lineStates.forEach(function (state) {
-            var fromPt = map.latLngToLayerPoint(state.from);
-            var toPt = map.latLngToLayerPoint(state.to);
+            var fromPt = map.latLngToContainerPoint(state.from);
+            var toPt = map.latLngToContainerPoint(state.to);
             var ctrlPt = computeControlPoint(fromPt, toPt);
             var highlight = self.hoverCity === state.id;
             var alphaBase = highlight ? 0.92 : 0.33;
@@ -309,11 +313,38 @@
             attributionControl: true,
             worldCopyJump: false
         });
+        if (map.attributionControl && typeof map.attributionControl.setPrefix === "function") {
+            map.attributionControl.setPrefix("");
+        }
 
-        L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-            maxZoom: 18,
-            attribution: "&copy; OpenStreetMap &copy; CARTO"
-        }).addTo(map);
+        var tdtToken =
+            config.tdtToken ||
+            container.getAttribute("data-tdt-token") ||
+            window.TIANDITU_TOKEN ||
+            "";
+
+        if (tdtToken) {
+            L.tileLayer(
+                "https://t{s}.tianditu.gov.cn/vec_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=vec&style=default&tilematrixset=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk={token}",
+                {
+                    subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"],
+                    token: tdtToken,
+                    maxZoom: 18,
+                    attribution: "&copy; Tianditu &copy; OpenStreetMap contributors"
+                }
+            ).addTo(map);
+            L.tileLayer(
+                "https://t{s}.tianditu.gov.cn/eva_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=eva&style=default&tilematrixset=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk={token}",
+                {
+                    subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"],
+                    token: tdtToken,
+                    maxZoom: 18,
+                    attribution: "&copy; Tianditu"
+                }
+            ).addTo(map);
+        } else {
+            console.error("[finance-map] TIANDITU token missing. Basemap is not loaded.");
+        }
 
         // Ensure default viewport contains HQ and all target nodes.
         var allPoints = [L.latLng(ALMATY[0], ALMATY[1])].concat(
@@ -468,14 +499,14 @@
 
         function findNearestLineNode(latlng, threshold) {
             if (!latlng) return null;
-            var clickPt = map.latLngToLayerPoint(latlng);
-            var hqPt = map.latLngToLayerPoint(L.latLng(ALMATY[0], ALMATY[1]));
+            var clickPt = map.latLngToContainerPoint(latlng);
+            var hqPt = map.latLngToContainerPoint(L.latLng(ALMATY[0], ALMATY[1]));
             var bestNode = null;
             var bestDist = Number.POSITIVE_INFINITY;
 
             for (var ni = 0; ni < data.length; ni += 1) {
                 var node = data[ni];
-                var toPt = map.latLngToLayerPoint(L.latLng(node.lat, node.lng));
+                var toPt = map.latLngToContainerPoint(L.latLng(node.lat, node.lng));
                 var ctrlPt = computeControlPoint(hqPt, toPt);
                 var prev = pointOnQuadratic(hqPt, ctrlPt, toPt, 0);
                 var minDist = Number.POSITIVE_INFINITY;
