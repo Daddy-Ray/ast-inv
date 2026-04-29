@@ -455,7 +455,7 @@ body.page-services.page-services-overview {
     background-image: linear-gradient(rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.74)), url("../assets/backgrounds/victoria-harbor-night.jpg");
 }
 
-body.page-services:not(.page-services-overview):not(.page-strategy) {
+body.page-services:not(.page-services-overview):not(.page-strategy):not(.page-investment-management) {
     background-image: linear-gradient(rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.74)), url("../assets/backgrounds/victoria-harbor-night.jpg");
 }
 
@@ -859,6 +859,584 @@ body.page-strategy .services .service-card:hover {
     transform: translateY(-7px);
     border-top-color: rgba(205, 33, 42, 0.56);
     box-shadow: 0 18px 36px rgba(15, 23, 42, 0.18);
+}
+
+body.page-investment-management .services {
+    padding-top: 3.2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+body.page-services.page-investment-management {
+    background-image:
+        linear-gradient(180deg, rgba(248, 251, 255, 0.82) 0%, rgba(244, 249, 255, 0.8) 55%, rgba(240, 246, 252, 0.82) 100%),
+        url("../assets/backgrounds/investment-management-bg.png");
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+body.page-investment-management .services::before,
+body.page-investment-management .services::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    z-index: 0;
+    border-radius: 50%;
+}
+
+body.page-investment-management .services::before {
+    width: 360px;
+    height: 360px;
+    top: -120px;
+    right: -120px;
+    background: radial-gradient(circle, rgba(0, 140, 69, 0.14) 0%, rgba(0, 140, 69, 0) 72%);
+}
+
+body.page-investment-management .services::after {
+    width: 420px;
+    height: 420px;
+    bottom: -180px;
+    left: -150px;
+    background: radial-gradient(circle, rgba(205, 33, 42, 0.12) 0%, rgba(205, 33, 42, 0) 70%);
+}
+
+body.page-investment-management .services .section-header {
+    max-width: 860px;
+    margin-bottom: 2.3rem;
+    position: relative;
+    z-index: 1;
+}
+
+body.page-investment-management .services .section-header p {
+    color: rgba(30, 41, 59, 0.84);
+}
+
+body.page-investment-management .services .service-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 1.25rem;
+    position: relative;
+    z-index: 1;
+    --investment-lead-card-height: 196px;
+    --investment-tier-gap: 68px;
+    --investment-child-card-height: 300px;
+    --investment-toggle-size: 44px;
+    --investment-lead-card-max-width: 560px;
+    --investment-lead-media-width: min(410px, calc(50% - 1rem));
+    --investment-side-image-width: min(328px, calc(50% - 1.6rem));
+}
+
+html[lang="en"] body.page-investment-management .services .service-grid {
+    --investment-child-card-height: 316px;
+}
+
+html[lang="ru"] body.page-investment-management .services .service-grid {
+    --investment-child-card-height: 324px;
+}
+
+body.page-investment-management .services .service-grid::before {
+    content: none;
+}
+
+body.page-investment-management .services .service-grid::after {
+    content: "";
+    position: absolute;
+    top: calc(var(--investment-lead-card-height) / 2);
+    left: 75%;
+    width: var(--investment-side-image-width);
+    aspect-ratio: 16 / 9;
+    height: auto;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 1;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.44);
+    box-shadow: 0 12px 26px rgba(15, 23, 42, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.36);
+    background-image:
+        linear-gradient(150deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.04)),
+        url("../assets/backgrounds/investment-lead-side-image.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    overflow: hidden;
+}
+
+body.page-investment-management .services .investment-grid-toggle {
+    position: absolute;
+    left: 50%;
+    top: calc(var(--investment-lead-card-height) + ((var(--investment-tier-gap) - var(--investment-toggle-size)) / 2));
+    transform: translateX(-50%);
+    width: var(--investment-toggle-size);
+    height: var(--investment-toggle-size);
+    border-radius: 50%;
+    border: 1px solid rgba(205, 33, 42, 0.38);
+    background: linear-gradient(145deg, rgba(205, 33, 42, 0.84), rgba(176, 28, 36, 0.8));
+    box-shadow: 0 8px 18px rgba(205, 33, 42, 0.24), 0 0 0 3px rgba(255, 255, 255, 0.86);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 4;
+    transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease, background-color 0.24s ease;
+    animation: investment-toggle-heartbeat 1.9s ease-in-out infinite;
+}
+
+body.page-investment-management .services .investment-grid-toggle:hover {
+    border-color: rgba(205, 33, 42, 0.56);
+    box-shadow: 0 10px 24px rgba(205, 33, 42, 0.3), 0 0 0 3px rgba(255, 255, 255, 0.9);
+}
+
+body.page-investment-management .services .investment-grid-toggle::before {
+    content: "";
+    width: 26px;
+    height: 16px;
+    background-image: url("../assets/images/investment-arrow.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    transform: scale(1.08);
+    filter:
+        brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(301deg) brightness(104%) contrast(101%)
+        drop-shadow(0 0 0.7px rgba(255, 255, 255, 0.95))
+        drop-shadow(0 0 0.7px rgba(255, 255, 255, 0.95));
+}
+
+body.page-investment-management .services .investment-grid-toggle::after {
+    content: "";
+    position: absolute;
+    inset: -7px;
+    border-radius: 50%;
+    border: 2px solid rgba(205, 33, 42, 0.24);
+    pointer-events: none;
+    animation: investment-toggle-pulse 1.8s ease-out infinite;
+}
+
+body.page-investment-management .services .service-grid.is-expanded .investment-grid-toggle {
+    transform: translateX(-50%) rotate(180deg);
+    animation: investment-toggle-breathe 2.2s ease-in-out infinite;
+    background: linear-gradient(145deg, rgba(0, 140, 69, 0.94), rgba(0, 112, 56, 0.92));
+    border-color: rgba(0, 140, 69, 0.56);
+    box-shadow: 0 10px 24px rgba(0, 140, 69, 0.32), 0 0 0 3px rgba(255, 255, 255, 0.84);
+}
+
+body.page-investment-management .services .service-grid.is-expanded .investment-grid-toggle::after {
+    border-color: rgba(0, 140, 69, 0.28);
+    animation: none;
+}
+
+@keyframes investment-toggle-pulse {
+    0% {
+        transform: scale(0.92);
+        opacity: 0.65;
+    }
+    70% {
+        transform: scale(1.12);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1.12);
+        opacity: 0;
+    }
+}
+
+@keyframes investment-toggle-heartbeat {
+    0%,
+    42%,
+    100% {
+        transform: translateX(-50%) scale(1);
+    }
+    18% {
+        transform: translateX(-50%) scale(1.08);
+    }
+    28% {
+        transform: translateX(-50%) scale(0.98);
+    }
+    34% {
+        transform: translateX(-50%) scale(1.05);
+    }
+}
+
+@keyframes investment-toggle-breathe {
+    0%,
+    100% {
+        box-shadow: 0 10px 24px rgba(0, 140, 69, 0.24), 0 0 0 3px rgba(255, 255, 255, 0.84);
+        border-color: rgba(0, 140, 69, 0.5);
+    }
+    50% {
+        box-shadow: 0 12px 28px rgba(0, 140, 69, 0.42), 0 0 0 3px rgba(255, 255, 255, 0.92), 0 0 0 8px rgba(0, 140, 69, 0.12);
+        border-color: rgba(0, 140, 69, 0.72);
+    }
+}
+
+body.page-investment-management .services .service-card {
+    position: relative;
+    overflow: hidden;
+    padding: 1.35rem 1.2rem 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.58);
+    border-top-color: rgba(255, 255, 255, 0.68);
+    border-radius: 14px;
+    background: linear-gradient(148deg, rgba(255, 255, 255, 0.66), rgba(244, 249, 255, 0.42));
+    backdrop-filter: blur(10px) saturate(125%);
+    -webkit-backdrop-filter: blur(10px) saturate(125%);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.13), inset 0 1px 0 rgba(255, 255, 255, 0.62);
+    transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease, background-color 0.28s ease, background 0.32s ease;
+}
+
+body.page-investment-management .services .service-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0) 62%);
+    opacity: 0.8;
+}
+
+body.page-investment-management .services .service-card:not(:first-child)::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 98px;
+    height: 98px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.19;
+    mix-blend-mode: multiply;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    filter:
+        grayscale(1)
+        sepia(1)
+        hue-rotate(48deg)
+        saturate(4.8)
+        brightness(0.56)
+        contrast(1.04);
+}
+
+body.page-investment-management .services .service-card:nth-child(2)::after {
+    background-image: url("../assets/images/investment-watermark-set3-clean-1.png");
+}
+
+body.page-investment-management .services .service-card:nth-child(3)::after {
+    background-image: url("../assets/images/investment-watermark-set3-clean-2.png");
+}
+
+body.page-investment-management .services .service-card:nth-child(4)::after {
+    background-image: url("../assets/images/investment-watermark-set3-clean-3.png");
+}
+
+body.page-investment-management .services .service-card:nth-child(5)::after {
+    background-image: url("../assets/images/investment-watermark-set3-clean-4.png");
+}
+
+body.page-investment-management .services .service-card:nth-child(6)::after {
+    background-image: url("../assets/images/investment-watermark-set3-clean-5.png");
+}
+
+body.page-investment-management .services .service-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+
+body.page-investment-management .services .service-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(205, 33, 42, 0.45);
+    box-shadow: 0 18px 34px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(205, 33, 42, 0.22) inset;
+}
+
+body.page-investment-management .services .service-card:not(:first-child):hover {
+    border-color: rgba(255, 255, 255, 0.74);
+    background:
+        radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, rgba(205, 33, 42, 0.035) 62%, rgba(205, 33, 42, 0.085) 100%),
+        linear-gradient(148deg, rgba(255, 255, 255, 0.58), rgba(244, 249, 255, 0.36));
+    box-shadow:
+        0 18px 34px rgba(15, 23, 42, 0.16),
+        0 0 0 1px rgba(255, 255, 255, 0.4) inset,
+        0 0 18px rgba(255, 255, 255, 0.2);
+}
+
+body.page-investment-management .services .service-card:not(:first-child):hover::after {
+    opacity: 0.25;
+}
+
+body.page-investment-management .services .service-card:first-child {
+    grid-column: 1 / 4;
+    justify-self: center;
+    width: min(calc((var(--investment-lead-media-width) + 24px) * 1.1), calc(50% - 0.5rem));
+    aspect-ratio: 16 / 9;
+    height: auto;
+    max-width: min(calc((var(--investment-lead-media-width) + 24px) * 1.1), calc(50% - 0.5rem));
+    overflow: visible;
+    z-index: 2;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    min-height: 0;
+    padding: 1.12rem 1.05rem;
+    background: linear-gradient(148deg, rgba(255, 255, 255, 0.66), rgba(244, 249, 255, 0.42));
+    border-color: rgba(255, 255, 255, 0.58);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.13), inset 0 1px 0 rgba(255, 255, 255, 0.62);
+}
+
+body.page-investment-management .services .service-card:first-child:hover,
+body.page-investment-management .services .service-grid.investment-collapsible.is-expanded .service-card:first-child {
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.74);
+    background:
+        radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, rgba(205, 33, 42, 0.035) 62%, rgba(205, 33, 42, 0.085) 100%),
+        linear-gradient(148deg, rgba(255, 255, 255, 0.58), rgba(244, 249, 255, 0.36));
+    box-shadow:
+        0 18px 34px rgba(15, 23, 42, 0.16),
+        0 0 0 1px rgba(255, 255, 255, 0.4) inset,
+        0 0 18px rgba(255, 255, 255, 0.2);
+}
+
+body.page-investment-management .services .service-card:first-child h3,
+body.page-investment-management .services .service-card:first-child p {
+    text-align: center;
+}
+
+body.page-investment-management .services .service-card:first-child p {
+    max-width: 100%;
+}
+
+body.page-investment-management .services .service-grid.investment-collapsible.is-expanded .service-card:nth-child(2) { grid-column: 1 / 3; }
+body.page-investment-management .services .service-grid.investment-collapsible.is-expanded .service-card:nth-child(3) { grid-column: 3 / 5; }
+body.page-investment-management .services .service-grid.investment-collapsible.is-expanded .service-card:nth-child(4) { grid-column: 5 / 7; }
+body.page-investment-management .services .service-grid.investment-collapsible.is-expanded .service-card:nth-child(5) { grid-column: 2 / 4; }
+body.page-investment-management .services .service-grid.investment-collapsible.is-expanded .service-card:nth-child(6) { grid-column: 4 / 6; }
+
+body.page-investment-management .services .service-grid.investment-collapsible.is-expanded {
+    grid-template-rows: auto var(--investment-tier-gap) var(--investment-child-card-height) var(--investment-child-card-height);
+}
+
+body.page-investment-management .services .service-grid.investment-collapsible.is-expanded .service-card:nth-child(n+2) {
+    width: 100%;
+    justify-self: stretch;
+    height: 100%;
+    min-height: var(--investment-child-card-height);
+    max-height: none;
+    margin-top: 0;
+    border-color: rgba(255, 255, 255, 0.66);
+    background:
+        radial-gradient(circle at center, rgba(255, 255, 255, 0.14) 0%, rgba(205, 33, 42, 0.03) 62%, rgba(205, 33, 42, 0.07) 100%),
+        linear-gradient(148deg, rgba(255, 255, 255, 0.56), rgba(244, 249, 255, 0.34));
+    box-shadow:
+        0 16px 30px rgba(15, 23, 42, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.32) inset,
+        0 0 14px rgba(255, 255, 255, 0.16);
+}
+
+body.page-investment-management .services .service-grid.investment-collapsible.is-expanded .service-card:nth-child(n+2)::after {
+    opacity: 0.22;
+}
+
+body.page-investment-management .services .service-grid.investment-collapsible.is-expanded .service-card:nth-child(2),
+body.page-investment-management .services .service-grid.investment-collapsible.is-expanded .service-card:nth-child(3),
+body.page-investment-management .services .service-grid.investment-collapsible.is-expanded .service-card:nth-child(4) {
+    grid-row: 3;
+}
+
+body.page-investment-management .services .service-grid.investment-collapsible.is-expanded .service-card:nth-child(5),
+body.page-investment-management .services .service-grid.investment-collapsible.is-expanded .service-card:nth-child(6) {
+    grid-row: 4;
+}
+
+
+body.page-investment-management .services .service-card:not(:first-child) {
+    background: linear-gradient(148deg, rgba(255, 255, 255, 0.48), rgba(244, 249, 255, 0.26));
+    min-height: 208px;
+    height: auto;
+    padding: 1rem 0.95rem 0.92rem;
+}
+
+html[lang="en"] body.page-investment-management .services .service-grid.investment-collapsible.is-expanded .service-card:nth-child(n+2),
+html[lang="ru"] body.page-investment-management .services .service-grid.investment-collapsible.is-expanded .service-card:nth-child(n+2) {
+    padding-bottom: 1.18rem;
+}
+
+body.page-investment-management .services .service-grid.investment-collapsible .service-card:nth-child(n+2) {
+    transition: opacity 0.28s ease, transform 0.28s ease, max-height 0.32s ease, margin-top 0.28s ease, padding-top 0.28s ease, padding-bottom 0.28s ease, border-width 0.28s ease;
+    max-height: 540px;
+    opacity: 1;
+    transform: translateY(0);
+    min-height: 0;
+}
+
+body.page-investment-management .services .service-grid.investment-collapsible.is-collapsed .service-card:nth-child(n+2) {
+    max-height: 74px;
+    opacity: 1;
+    transform: translateY(0);
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    min-height: 74px;
+    pointer-events: auto;
+    overflow: hidden;
+}
+
+body.page-investment-management .services .service-grid.investment-collapsible.is-collapsed .service-card:nth-child(n+2)::after {
+    display: block;
+    width: 54px;
+    height: 54px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.17;
+}
+
+body.page-investment-management .services .service-grid.investment-collapsible.is-collapsed {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    grid-template-rows: auto var(--investment-tier-gap) 74px;
+    gap: 0.72rem;
+}
+
+body.page-investment-management .services .service-grid.investment-collapsible.is-collapsed .service-card:first-child {
+    grid-column: 1 / 6;
+    justify-self: center;
+    width: min(calc((var(--investment-lead-media-width) + 24px) * 1.1), calc(50% - 0.5rem));
+    aspect-ratio: 16 / 9;
+    height: auto;
+    max-width: min(calc((var(--investment-lead-media-width) + 24px) * 1.1), calc(50% - 0.5rem));
+}
+
+body.page-investment-management .services .service-grid.investment-collapsible.is-collapsed .service-card:nth-child(2) { grid-column: 1 / 3; }
+body.page-investment-management .services .service-grid.investment-collapsible.is-collapsed .service-card:nth-child(3) { grid-column: 3 / 5; }
+body.page-investment-management .services .service-grid.investment-collapsible.is-collapsed .service-card:nth-child(4) { grid-column: 5 / 7; }
+body.page-investment-management .services .service-grid.investment-collapsible.is-collapsed .service-card:nth-child(5) { grid-column: 7 / 9; }
+body.page-investment-management .services .service-grid.investment-collapsible.is-collapsed .service-card:nth-child(6) { grid-column: 9 / 11; }
+
+body.page-investment-management .services .service-grid.investment-collapsible.is-collapsed .service-card:nth-child(n+2) {
+    grid-row: 3;
+}
+
+body.page-investment-management .services .service-grid.investment-collapsible.is-collapsed .service-card:nth-child(n+2) {
+    width: 100%;
+    justify-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+}
+
+body.page-investment-management .services .service-grid.investment-collapsible .service-card:nth-child(n+2) p {
+    max-height: none;
+    opacity: 1;
+    overflow: visible;
+    transition: max-height 0.24s ease, opacity 0.24s ease, margin 0.2s ease, padding 0.2s ease;
+}
+
+body.page-investment-management .services .service-grid.investment-collapsible.is-collapsed .service-card:nth-child(n+2) p {
+    max-height: 0;
+    opacity: 0;
+    margin: 0;
+    padding: 0;
+}
+
+body.page-investment-management .services .service-grid.investment-collapsible.is-collapsed .service-card:nth-child(n+2) h3 {
+    margin: 0;
+    width: auto;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.92rem;
+    line-height: 1.28;
+    letter-spacing: 0.12px;
+}
+
+body.page-investment-management .services .service-grid.investment-collapsible.is-collapsed .service-card:nth-child(n+2) h3::before {
+    display: none;
+}
+
+body.page-investment-management .services .service-card h3 {
+    margin-bottom: 0.72rem;
+    font-size: 1.16rem;
+    line-height: 1.36;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+body.page-investment-management .services .service-card h3::before {
+    content: "";
+    width: 0.56rem;
+    height: 0.56rem;
+    border-radius: 50%;
+    flex: 0 0 0.56rem;
+    background: linear-gradient(145deg, rgba(0, 140, 69, 0.9), rgba(205, 33, 42, 0.82));
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.72);
+}
+
+body.page-investment-management .services .service-card p {
+    margin-bottom: 0.64rem;
+    color: rgba(30, 41, 59, 0.9);
+    line-height: 1.64;
+    font-size: 0.94rem;
+}
+
+body.page-investment-management .services .service-card p:last-child {
+    margin-bottom: 0;
+}
+
+/* Make each card's concluding paragraph more scannable */
+body.page-investment-management .services .service-card p + p {
+    font-weight: 600;
+    color: rgba(22, 34, 51, 0.95);
+    border-top: 1px dashed rgba(30, 41, 59, 0.2);
+    margin-top: 0.68rem;
+    padding-top: 0.58rem;
+}
+
+@media (max-width: 900px) {
+    body.page-services.page-investment-management {
+        background-image:
+            linear-gradient(180deg, rgba(248, 251, 255, 0.82) 0%, rgba(244, 249, 255, 0.8) 55%, rgba(240, 246, 252, 0.82) 100%),
+            url("../assets/backgrounds/investment-management-bg-mobile.png");
+        background-position: center center;
+        background-attachment: scroll;
+    }
+
+    body.page-investment-management .services .service-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    body.page-investment-management .services .service-grid::before,
+    body.page-investment-management .services .service-grid::after {
+        display: none;
+    }
+
+    body.page-investment-management .services .investment-grid-toggle {
+        display: none;
+    }
+
+    body.page-investment-management .services .service-card:first-child {
+        grid-column: 1 / -1;
+        aspect-ratio: auto;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    body.page-investment-management .services .service-card:nth-child(2),
+    body.page-investment-management .services .service-card:nth-child(3),
+    body.page-investment-management .services .service-card:nth-child(4),
+    body.page-investment-management .services .service-card:nth-child(5),
+    body.page-investment-management .services .service-card:nth-child(6) {
+        grid-column: auto;
+        width: 100%;
+        min-height: 0;
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 640px) {
+    body.page-investment-management .services .service-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .news-lead-card {

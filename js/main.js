@@ -1583,6 +1583,90 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    const installInvestmentCardsToggle = () => {
+        const grid = document.querySelector('body.page-investment-management section.services .service-grid');
+        if (!grid) return;
+        const cards = Array.from(grid.querySelectorAll('.service-card'));
+        if (cards.length < 6) return;
+        if (grid.querySelector('.investment-grid-toggle')) return;
+        const leadCard = cards[0];
+        const contentCards = cards.slice(1);
+        const pageLang = getCurrentLang();
+        const dynamicHeightLang = pageLang === 'en' || pageLang === 'ru';
+        grid.classList.add('investment-collapsible', 'is-collapsed');
+        grid.setAttribute('aria-expanded', 'false');
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'investment-grid-toggle';
+        btn.setAttribute('aria-label', 'Toggle investment cards');
+        btn.setAttribute('aria-expanded', 'false');
+        grid.appendChild(btn);
+
+        const setExpanded = (expanded) => {
+            grid.classList.toggle('is-expanded', expanded);
+            grid.classList.toggle('is-collapsed', !expanded);
+            grid.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+            btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+            btn.setAttribute('aria-label', expanded ? 'Collapse investment cards' : 'Expand investment cards');
+            if (expanded) {
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(syncExpandedCardHeight);
+                });
+            }
+        };
+
+        const syncExpandedCardHeight = () => {
+            if (!dynamicHeightLang) return;
+            if (!grid.classList.contains('is-expanded')) return;
+            let maxScroll = 0;
+            contentCards.forEach((card) => {
+                if (!card) return;
+                maxScroll = Math.max(maxScroll, card.scrollHeight || 0);
+            });
+            if (maxScroll > 0) {
+                // Keep all five cards equal while ensuring full text visibility.
+                const safeHeight = Math.ceil(maxScroll + 10);
+                grid.style.setProperty('--investment-child-card-height', `${safeHeight}px`);
+            }
+        };
+
+        btn.addEventListener('click', () => {
+            const expanded = grid.classList.contains('is-collapsed');
+            setExpanded(expanded);
+        });
+
+        const syncLeadCardHeight = () => {
+            if (!leadCard) return;
+            const h = Math.round(leadCard.getBoundingClientRect().height);
+            if (h > 0) {
+                grid.style.setProperty('--investment-lead-card-height', `${h}px`);
+            }
+        };
+
+        const syncToggleForViewport = () => {
+            const compact = window.matchMedia('(max-width: 900px)').matches;
+            if (compact) {
+                btn.style.display = 'none';
+                setExpanded(true);
+            } else {
+                btn.style.display = '';
+                if (!grid.classList.contains('is-expanded')) {
+                    setExpanded(false);
+                }
+            }
+            requestAnimationFrame(syncExpandedCardHeight);
+        };
+
+        syncLeadCardHeight();
+        syncToggleForViewport();
+        window.addEventListener('resize', () => {
+            syncLeadCardHeight();
+            syncToggleForViewport();
+            requestAnimationFrame(syncExpandedCardHeight);
+        });
+    };
+
     ensurePageSectionIds();
     installStrategicNavLinks();
     ensureLegalLangSwitch();
@@ -1603,6 +1687,7 @@ document.addEventListener('DOMContentLoaded', () => {
     installClickableCards();
     installCaseAccordions();
     installCaseGalleries();
+    installInvestmentCardsToggle();
 
     // Keep footer year current across all pages.
     const currentYear = new Date().getFullYear();

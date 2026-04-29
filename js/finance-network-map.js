@@ -333,7 +333,8 @@
                     attribution: "&copy; Tianditu &copy; OpenStreetMap contributors"
                 }
             ).addTo(map);
-            L.tileLayer(
+
+            var tdtEnglishLabels = L.tileLayer(
                 "https://t{s}.tianditu.gov.cn/eva_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=eva&style=default&tilematrixset=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk={token}",
                 {
                     subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"],
@@ -341,7 +342,11 @@
                     maxZoom: 18,
                     attribution: "&copy; Tianditu"
                 }
-            ).addTo(map);
+            );
+            tdtEnglishLabels.on("tileerror", function () {
+                console.warn("[finance-map] Tianditu english labels tile failed to load.");
+            });
+            tdtEnglishLabels.addTo(map);
         } else {
             console.error("[finance-map] TIANDITU token missing. Basemap is not loaded.");
         }
